@@ -62,9 +62,63 @@ button:disabled{background:#999;cursor:not-allowed;}
 .status.error{background:#f8d7da;color:#721c24;display:block}
 .empty{text-align:center;padding:40px;color:#999;font-size:15px;}
 .footer{text-align:center;margin-top:25px;padding-top:15px;color:#999;font-size:13px;}
+
+/* 全局弹窗样式 */
+.modal-mask{
+  position:fixed;top:0;left:0;width:100%;height:100%;
+  background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;
+  z-index:9999;padding:15px;
+}
+.modal-box{
+  background:#fff;border-radius:12px;padding:20px;max-width:500px;width:100%;
+  max-height:85vh;overflow-y:auto;
+}
+.modal-title{
+  font-size:20px;font-weight:bold;text-align:center;margin-bottom:15px;
+}
+.modal-content{
+  font-size:15px;line-height:1.7;margin-bottom:20px;color:#333;
+}
+.modal-btn-group{
+  display:flex;gap:10px;
+}
+.modal-btn{
+  flex:1;padding:12px;border:none;border-radius:8px;font-size:16px;cursor:pointer;
+}
+.btn-close{background:#666;color:#fff;}
+.btn-donate{background:#e64340;color:#fff;}
+
+/* 打赏弹窗 */
+.donate-img{width:100%;border-radius:8px;margin-bottom:15px;}
 </style>
 </head>
 <body>
+
+<!-- 启动欢迎弹窗 -->
+<div id="welcomeModal" class="modal-mask">
+  <div class="modal-box">
+    <div class="modal-title">欢迎使用捌壹零拼图器</div>
+    <div class="modal-content">
+欢迎使用捌壹零的拼图器<br><br>
+拼图器最多能放99张，每行数量有2、3、4、5、6（注意是每行不是每列）<br><br>
+你们的图片不会上传到服务器，我也看不到，请放心使用<br><br>
+由于每个人手机+设置的不同，所看到的页面大小也不同，页面或大或小都是正常现象哦，如果是chrome浏览器可以点开右上角三个小点，然后往下看，有个缩放，往后拉可以让页面看起来没这么紧凑，至于其他的浏览器，我还不知道该怎么做(￣ェ￣;)<br><br>
+后续会陆续推出新的功能，敬请期待吧
+    </div>
+    <div class="modal-btn-group">
+      <button class="modal-btn btn-close" id="closeWelcome">关闭</button>
+      <button class="modal-btn btn-donate" id="openDonate">打赏</button>
+    </div>
+  </div>
+</div>
+
+<!-- 打赏弹窗 -->
+<div id="donateModal" class="modal-mask" style="display:none;">
+  <div class="modal-box">
+    <img class="donate-img" src="https://cdn.mufy.ai/images/3492b8c4-6cf0-4724-7068-26dfe0bffd00/public" alt="打赏">
+    <button class="modal-btn btn-close" id="closeDonate">关闭</button>
+  </div>
+</div>
 
 <div class="container">
     <div class="header"><h2>捌壹零拼图器</h2></div>
@@ -127,6 +181,28 @@ button:disabled{background:#999;cursor:not-allowed;}
 
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 <script>
+// 弹窗元素
+const welcomeModal = document.getElementById('welcomeModal');
+const donateModal = document.getElementById('donateModal');
+const closeWelcome = document.getElementById('closeWelcome');
+const openDonate = document.getElementById('openDonate');
+const closeDonate = document.getElementById('closeDonate');
+
+// 欢迎弹窗关闭
+closeWelcome.addEventListener('click',()=>{
+    welcomeModal.style.display = 'none';
+});
+// 打开打赏弹窗
+openDonate.addEventListener('click',()=>{
+    welcomeModal.style.display = 'none';
+    donateModal.style.display = 'flex';
+});
+// 关闭打赏弹窗
+closeDonate.addEventListener('click',()=>{
+    donateModal.style.display = 'none';
+});
+
+// 拼图器原有逻辑
 const uploadBox = document.getElementById('uploadBox');
 const fileInput = document.getElementById('fileInput');
 const selectBtn = document.getElementById('selectBtn');
@@ -259,7 +335,6 @@ createBtn.onclick=async ()=>{
     const GAP=12;
     const CW=2400;
     const BG='#ccc';
-    // 调整倍率，字号适中
     const FONT_SIZE=parseInt(numSize.value)*2;
     const POS=numPos.value;
     const CELL=(CW-(COL+1)*GAP)/COL;
