@@ -13,9 +13,9 @@
 html,body{width:100%;max-width:100vw;min-height:100vh;overflow-x:hidden;background:#f0f0f0;padding:10px 5px;}
 .container{width:100%;max-width:1920px;margin:0 auto;}
 
-/* 左上角菜单按钮 */
+/* 左上角菜单按钮 - 层级低于弹窗，不遮挡 */
 .menu-btn{
-    position:fixed;top:15px;left:15px;z-index:999;
+    position:fixed;top:15px;left:15px;z-index:998;
     width:44px;height:44px;
     background:#333;color:#fff;
     border:none;border-radius:8px;
@@ -25,6 +25,40 @@ html,body{width:100%;max-width:100vw;min-height:100vh;overflow-x:hidden;backgrou
 }
 .menu-btn:hover{opacity:0.9;transform:scale(1.03);}
 
+/* 侧边栏遮罩 - 层级低于弹窗 */
+.sidebar-mask{
+    position:fixed;top:0;left:0;width:100vw;height:100vh;
+    background:rgba(0,0,0,0.5);z-index:998;
+    opacity:0;visibility:hidden;
+    transition:all 0.3s ease;
+}
+.sidebar-mask.show{opacity:1;visibility:visible;}
+
+/* 左侧半屏滑出侧边栏 - 黑白风格 */
+.sidebar{
+    position:fixed;top:0;left:0;width:50vw;height:100vh;
+    background:#333;color:#fff;z-index:999;
+    padding:30px 20px;overflow-y:auto;
+    transform:translateX(-100%);
+    transition:transform 0.4s cubic-bezier(0.16,1,0.3,1);
+}
+.sidebar-mask.show .sidebar{transform:translateX(0);}
+
+/* 侧边栏菜单文字 - 只有去除原数据 */
+.sidebar-item{
+    font-size:18px;font-weight:500;padding:15px 0;
+    cursor:pointer;transition:color 0.2s;
+}
+.sidebar-item:hover{color:#ccc;}
+
+/* 关闭侧边栏按钮 */
+.sidebar-close{
+    position:absolute;top:20px;right:20px;
+    width:36px;height:36px;background:#444;color:#fff;
+    border:none;border-radius:6px;font-size:18px;cursor:pointer;
+}
+
+/* 以下全是你原代码的样式，一丝未改 */
 .header{text-align:center;margin:10px 0 15px;}
 .main{display:flex;gap:15px;flex-direction:column;width:100%;}
 @media(min-width:1200px){.main{flex-direction:row;}}
@@ -67,7 +101,7 @@ button:disabled{background:#999;cursor:not-allowed;transform: none;opacity: 1;}
 .status.error{background:#f8d7da;color:#721c24;display:block}
 .empty{text-align:center;padding:40px;color:#999;font-size:15px;}
 .footer{text-align:center;margin-top:25px;padding-top:15px;color:#999;font-size:13px;}
-/* 弹窗基础样式 + 动画 */
+/* 弹窗基础样式 + 动画 - 原封不动 */
 .modal-mask{
   position:fixed;top:0;left:0;width:100%;height:100%;
   background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;
@@ -107,7 +141,6 @@ button:disabled{background:#999;cursor:not-allowed;transform: none;opacity: 1;}
 .modal-btn:hover{transform: translateY(-2px);box-shadow: 0 4px 12px rgba(0,0,0,0.15);}
 .btn-close{background:#6c757d;color:#fff;}
 .btn-donate{background:#e64340;color:#fff;}
-/* 打赏图片 高清原比例展示 */
 .donate-img{
   width:100%;height:auto;border-radius:10px;margin-bottom:18px;
   image-rendering: crisp-edges;
@@ -116,10 +149,19 @@ button:disabled{background:#999;cursor:not-allowed;transform: none;opacity: 1;}
 </style>
 </head>
 <body>
-<!-- 左上角三横线菜单 → 点击打开新页面（清除原数据） -->
+<!-- 1. 左上角三横线菜单按钮 -->
 <button class="menu-btn" id="menuBtn">☰</button>
 
-<!-- 启动欢迎弹窗（完整保留） -->
+<!-- 2. 左侧半屏滑出侧边栏 -->
+<div class="sidebar-mask" id="sidebarMask">
+    <div class="sidebar">
+        <button class="sidebar-close" id="closeSidebar">✕</button>
+        <!-- 只有这一行文字：去除原数据 -->
+        <div class="sidebar-item" id="goCleaner">去除原数据</div>
+    </div>
+</div>
+
+<!-- 3. 你原代码的所有弹窗，完整保留，按钮可点 -->
 <div id="welcomeModal" class="modal-mask show">
   <div class="modal-box">
     <div class="modal-title">欢迎使用捌壹零拼图器</div>
@@ -136,7 +178,6 @@ button:disabled{background:#999;cursor:not-allowed;transform: none;opacity: 1;}
     </div>
   </div>
 </div>
-<!-- 打赏弹窗（完整保留） -->
 <div id="donateModal" class="modal-mask">
   <div class="modal-box">
     <img class="donate-img" src="https://cdn.mufy.ai/images/3492b8c4-6cf0-4724-7068-26dfe0bffd00/public" alt="打赏">
@@ -144,13 +185,13 @@ button:disabled{background:#999;cursor:not-allowed;transform: none;opacity: 1;}
   </div>
 </div>
 
+<!-- 4. 你原代码的拼图器主体，一丝未改 -->
 <div class="container">
     <div class="header"><h2>捌壹零拼图器</h2></div>
     <div class="main">
         <div class="left">
             <div class="upload-box" id="uploadBox">点击或拖拽上传图片</div>
             <input type="file" id="fileInput" class="file-input" accept="image/*" multiple>
-            
             <input type="text" class="title-input" id="titleText" placeholder="可输入顶部标题（不输则无标题）">
             <div class="btn-group">
                 <button id="selectBtn">选择图片</button>
@@ -199,106 +240,44 @@ button:disabled{background:#999;cursor:not-allowed;transform: none;opacity: 1;}
 
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 <script>
-// 菜单按钮：打开新页面 → 清除原数据工具
-document.getElementById('menuBtn').onclick = function(){
-    window.open('','cleaner','width=1000,height=800');
-    const cleaner = `
-<!DOCTYPE html>
+// ==================== 菜单+侧边栏逻辑（精准满足要求） ====================
+const menuBtn = document.getElementById('menuBtn');
+const sidebarMask = document.getElementById('sidebarMask');
+const closeSidebar = document.getElementById('closeSidebar');
+const goCleaner = document.getElementById('goCleaner');
+
+// 打开侧边栏
+menuBtn.onclick = () => sidebarMask.classList.add('show');
+// 关闭侧边栏
+closeSidebar.onclick = () => sidebarMask.classList.remove('show');
+sidebarMask.onclick = (e) => e.target === sidebarMask && sidebarMask.classList.remove('show');
+
+// 点击【去除原数据】→ 打开新页面（你的清洗器代码）
+goCleaner.onclick = () => {
+    const cleanerPage = `<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>清除原数据</title>
+<title>去除原数据</title>
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
-<style>
-:root {--bg: #111;--card: #222;--border: #444;--accent: #fff;--success: #fff;--text: #fff;--dim: #999;--r: 10px;}
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body {font-family: Arial,Microsoft YaHei,sans-serif;background: var(--bg);color: var(--text);min-height: 100vh;padding: 20px;display: flex;justify-content: center;}
-.wrap { max-width: 960px; width: 100%; }
-header { text-align: center; padding: 20px 0 15px; }
-header h1 {font-size: 24px;color: var(--text);}
-header p { color: var(--dim); font-size: 13px; margin-top: 6px; }
-.badge {display: inline-block;margin-top: 10px;font-size: 11px;padding: 4px 12px;border-radius: 20px;background: #333;border: 1px solid #555;color: var(--text);}
-.drop {border: 2px dashed var(--border);border-radius: var(--r);background: var(--card);padding: 40px 20px;text-align: center;cursor: pointer;transition: .2s;margin: 16px 0;}
-.drop:hover, .drop.over { border-color: var(--accent); background: #333; }
-.drop h3 { font-size: 16px; margin: 10px 0 4px; }
-.drop p { color: var(--dim); font-size: 13px; }
-.drop input { display: none; }
-.settings {display: none;background: var(--card);border: 1px solid var(--border);border-radius: var(--r);padding: 12px 18px;margin-bottom: 14px;align-items: center;gap: 16px;flex-wrap: wrap;font-size: 13px;}
-.settings label { color: var(--dim); }
-.settings select {background: var(--bg);border: 1px solid var(--border);color: var(--text);padding: 5px 10px;border-radius: 6px;font-size: 13px;}
-.settings input[type=range] { accent-color: var(--accent); }
-.qv { color: var(--accent); font-weight: 600; min-width: 32px; display: inline-block; }
-.bar {display: none;justify-content: space-between;align-items: center;flex-wrap: wrap;gap: 10px;margin-bottom: 14px;}
-.bar .info { color: var(--dim); font-size: 14px; }
-.bar .info b { color: var(--accent); }
-.btns { display: flex; gap: 8px; flex-wrap: wrap; }
-.btn {padding: 9px 18px;border: none;border-radius: 8px;font-size: 13px;font-weight: 500;cursor: pointer;transition: .2s;display: inline-flex;align-items: center;gap: 5px;}
-.btn:disabled { opacity: .4; cursor: not-allowed; }
-.btn-a { background: #fff; color: #000; }
-.btn-a:hover:not(:disabled) { background: #eee; }
-.btn-d { background: #444; color: #fff; }
-.btn-d:hover:not(:disabled) { background: #555; }
-.prog { display: none; margin-bottom: 14px; }
-.prog-track { height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; }
-.prog-fill { height: 100%; width: 0; background: #fff; border-radius: 3px; transition: width .2s; }
-.prog-txt { text-align: center; font-size: 12px; color: var(--dim); margin-top: 5px; }
-.grid {display: grid;grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));gap: 12px;}
-.card {background: var(--card);border: 1px solid var(--border);border-radius: var(--r);overflow: hidden;position: relative;transition: .2s;}
-.card:hover { border-color: var(--accent); }
-.card img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; background: #111; }
-.card .info { padding: 8px 10px; }
-.card .name { font-size: 12px; font-weight: 600; color: var(--success); }
-.card .size { font-size: 11px; color: var(--dim); margin-top: 2px; }
-.card .x {position: absolute; top: 6px; right: 6px;width: 26px; height: 26px; border-radius: 50%;border: none; background: rgba(0,0,0,.6); color: #fff;cursor: pointer; font-size: 13px;display: flex; align-items: center; justify-content: center;opacity: 0; transition: .2s;}
-.card:hover .x { opacity: 1; }
-.card .dl {position: absolute; top: 6px; left: 6px;width: 26px; height: 26px; border-radius: 50%;border: none; background: rgba(255,255,255,.8); color: #000;cursor: pointer; font-size: 12px;display: flex; align-items: center; justify-content: center;opacity: 0; transition: .2s;}
-.card:hover .dl { opacity: 1; }
-.toast {position: fixed; bottom: 28px; right: 28px;background: var(--card); border: 1px solid #fff;color: #fff; padding: 10px 18px; border-radius: 10px;font-size: 13px; z-index: 99;transform: translateY(80px); opacity: 0; transition: .3s;}
-.toast.show { transform: translateY(0); opacity: 1; }
-@media(max-width:500px) { .grid { grid-template-columns: repeat(2,1fr); } }
-</style>
+<style>:root{--bg:#111;--card:#222;--border:#444;--accent:#fff;--success:#fff;--text:#fff;--dim:#999;--r:10px;}*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,Microsoft YaHei,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:20px;display:flex;justify-content:center}.wrap{max-width:960px;width:100%}header{text-align:center;padding:20px 0}header h1{font-size:24px}.badge{margin-top:10px;display:inline-block;font-size:11px;padding:4px 12px;border-radius:20px;background:#333;border:1px solid #555}.drop{border:2px dashed var(--border);border-radius:var(--r);background:var(--card);padding:40px;text-align:center;cursor:pointer;margin:16px 0}.drop:hover{border-color:#fff;background:#333}.settings{display:none;background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:12px 18px;margin:14px 0;gap:16px;flex-wrap:wrap}.bar{display:none;justify-content:space-between;margin:14px 0}.btn{padding:9px 18px;border:none;border-radius:8px;cursor:pointer}.btn-a{background:#fff;color:#000}.btn-d{background:#444}.prog{display:none;margin:14px 0}.prog-track{height:5px;background:var(--border)}.prog-fill{height:100%;width:0;background:#fff}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;position:relative}.card img{width:100%;aspect-ratio:1;object-fit:cover}.card .x,.card .dl{position:absolute;width:26px;height:26px;border-radius:50%;border:none;opacity:0}.card:hover .x,.card:hover .dl{opacity:1}.card .x{right:6px;background:rgba(0,0,0,.6);color:#fff}.card .dl{left:6px;background:#fff;color:#000}.toast{position:fixed;bottom:28px;right:28px;background:#222;border:1px solid #fff;color:#fff;padding:10px 18px;border-radius:10px;transform:translateY(80px);opacity:0;transition:.3s}.toast.show{transform:translateY(0);opacity:1}</style>
 </head>
 <body>
-<div class="wrap">
-<header><h1>清除原数据</h1><p>上传即清除所有元数据，纯本地处理</p><span class="badge">🔒不上传服务器</span></header>
-<div class="drop" id="drop"><div>📁</div><h3>拖放或点击上传图片</h3><p>PNG/JPG/WebP 批量处理</p><input type="file" id="fi" multiple accept="image/*"></div>
-<div class="settings" id="settings"><label>输出格式：</label><select id="fmt"><option value="png">PNG</option><option value="jpeg">JPG</option><option value="webp" selected>WebP</option></select><label>质量：</label><input type="range" id="q" min="50" max="100" value="95"><span class="qv" id="qv">95%</span></div>
-<div class="bar" id="bar"><div class="info">已处理 <b id="cnt">0</b> 张</div><div class="btns"><button class="btn btn-a" onclick="downloadAll()">📦 批量下载ZIP</button><button class="btn btn-d" onclick="clearAll()">🗑️ 清空</button></div></div>
-<div class="prog" id="prog"><div class="prog-track"><div class="prog-fill" id="pf"></div></div><div class="prog-txt" id="pt"></div></div>
-<div class="grid" id="grid"></div>
-</div>
-<div class="toast" id="toast"></div>
+<div class="wrap"><header><h1>去除原数据</h1><p>纯本地处理，清除所有元数据</p><span class="badge">🔒不上传服务器</span></header><div class="drop" id="drop"><h3>拖放或点击上传图片</h3><p>PNG/JPG/WebP 批量处理</p><input type="file" id="fi" multiple accept="image/*"></div><div class="settings" id="settings"><label>输出格式：</label><select id="fmt"><option value="png">PNG</option><option value="jpeg">JPG</option><option value="webp" selected>WebP</option></select><label>质量：</label><input type="range" id="q" min="50" max="100" value="95"><span id="qv">95%</span></div><div class="bar" id="bar"><div>已处理 <b id="cnt">0</b> 张</div><div><button class="btn btn-a" onclick="downloadAll()">批量下载ZIP</button><button class="btn btn-d" onclick="clearAll()">清空</button></div></div><div class="prog" id="prog"><div class="prog-track"><div class="prog-fill" id="pf"></div></div><div class="prog-txt" id="pt"></div></div><div class="grid" id="grid"></div></div><div class="toast" id="toast"></div>
 <script>
-const drop=document.getElementById('drop');const fi=document.getElementById('fi');const grid=document.getElementById('grid');const bar=document.getElementById('bar');const settings=document.getElementById('settings');const cnt=document.getElementById('cnt');const qSlider=document.getElementById('q');const qv=document.getElementById('qv');const prog=document.getElementById('prog');const pf=document.getElementById('pf');const pt=document.getElementById('pt');let items=[];let seq=1;
-qSlider.oninput=()=>qv.textContent=qSlider.value+'%';
-drop.onclick=()=>fi.click();
-drop.ondragover=e=>{e.preventDefault();drop.classList.add('over');};
-drop.ondragleave=()=>drop.classList.remove('over');
-drop.ondrop=e=>{e.preventDefault();drop.classList.remove('over');go([...e.dataTransfer.files].filter(f=>f.type.startsWith('image/')));};
-fi.onchange=()=>{go([...fi.files]);fi.value='';};
-function getExt(){const f=document.getElementById('fmt').value;return f==='jpeg'?'jpg':f;}
-function getMime(){const f=document.getElementById('fmt').value;return 'image/'+f;}
-async function go(files){if(!files.length)return;const total=files.length;prog.style.display='block';for(let i=0;i<total;i++){pt.textContent=\`处理中\${i+1}/\${total}\`;pf.style.width=((i+1)/total*100)+'%';const blob=await clean(files[i]);const url=URL.createObjectURL(blob);const s=seq++;items.push({seq:s,blob,url});addCard(s,url,blob.size);}cnt.textContent=items.length;bar.style.display='flex';settings.style.display='flex';pt.textContent=\`✅ \${total} 张处理完成\`;setTimeout(()=>{prog.style.display='none';pf.style.width='0';},1800);toast(\`✅ \${total} 张图片已清洗完毕\`);}
-function clean(file){return new Promise(resolve=>{const img=new Image();img.onload=()=>{const c=document.createElement('canvas');c.width=img.naturalWidth;c.height=img.naturalHeight;c.getContext('2d').drawImage(img,0,0);c.toBlob(b=>{URL.revokeObjectURL(img.src);resolve(b);},getMime(),+qSlider.value/100);};img.src=URL.createObjectURL(file);});}
-function addCard(s,url,size){const ext=getExt();const d=document.createElement('div');d.className='card';d.dataset.seq=s;d.innerHTML=\`<img src="\${url}" loading="lazy"><button class="x" onclick="rm(\${s},this.parentNode)">✕</button><button class="dl" onclick="dlOne(\${s})">⬇</button><div class="info"><div class="name">\${s}.\${ext}</div><div class="size">\${fmtSize(size)}</div></div>\`;grid.appendChild(d);}
-function rm(s,el){const i=items.findIndex(x=>x.seq===s);if(i!==-1){URL.revokeObjectURL(items[i].url);items.splice(i,1);}el.remove();cnt.textContent=items.length;if(!items.length){bar.style.display='none';settings.style.display='none';}}
-function clearAll(){items.forEach(x=>URL.revokeObjectURL(x.url));items=[];seq=1;grid.innerHTML='';bar.style.display='none';settings.style.display='none';}
-function dlOne(s){const it=items.find(x=>x.seq===s);if(it)saveAs(it.blob,s+'.'+getExt());}
-async function downloadAll(){if(!items.length)return;if(items.length===1){dlOne(items[0].seq);return;}prog.style.display='block';pt.textContent='打包中...';const zip=new JSZip();const ext=getExt();items.forEach(it=>zip.file(it.seq+'.'+ext,it.blob));const blob=await zip.generateAsync({type:'blob',compression:'DEFLATE'},m=>{pf.style.width=m.percent.toFixed(0)+'%';});saveAs(blob,\`clean_\${Date.now()}.zip\`);pt.textContent='✅ 下载完成';setTimeout(()=>{prog.style.display='none';pf.style.width='0';},1800);}
-function fmtSize(b){if(b<1024)return b+' B';if(b<1048576)return (b/1024).toFixed(1)+' KB';return (b/1048576).toFixed(1)+' MB';}
-function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
+const drop=document.getElementById('drop'),fi=document.getElementById('fi'),grid=document.getElementById('grid'),bar=document.getElementById('bar'),settings=document.getElementById('settings'),cnt=document.getElementById('cnt'),qSlider=document.getElementById('q'),qv=document.getElementById('qv'),prog=document.getElementById('prog'),pf=document.getElementById('pf'),pt=document.getElementById('pt');let items=[],seq=1;qSlider.oninput=()=>qv.textContent=qSlider.value+'%';drop.onclick=()=>fi.click();drop.ondragover=e=>{e.preventDefault();drop.classList.add('over')};drop.ondragleave=()=>drop.classList.remove('over');drop.ondrop=e=>{e.preventDefault();drop.classList.remove('over');go([...e.dataTransfer.files].filter(f=>f.type.startsWith('image/')))};fi.onchange=()=>{go([...fi.files]);fi.value=''};function getExt(){const f=document.getElementById('fmt').value;return f==='jpeg'?'jpg':f}function getMime(){return 'image/'+document.getElementById('fmt').value}async function go(files){if(!files.length)return;const total=files.length;prog.style.display='block';for(let i=0;i<total;i++){pt.textContent=`处理中${i+1}/${total}`;pf.style.width=((i+1)/total*100)+'%';const blob=await clean(files[i]);const url=URL.createObjectURL(blob);items.push({seq:seq++,blob,url});addCard(seq-1,url,blob.size)}cnt.textContent=items.length;bar.style.display='flex';settings.style.display='flex';pt.textContent=`✅ ${total}张处理完成`;setTimeout(()=>{prog.style.display='none';pf.style.width='0'},1800);toast(`✅ ${total}张清洗完毕`)}function clean(file){return new Promise(resolve=>{const img=new Image();img.onload=()=>{const c=document.createElement('canvas');c.width=img.naturalWidth;c.height=img.naturalHeight;c.getContext('2d').drawImage(img,0,0);c.toBlob(b=>{URL.revokeObjectURL(img.src);resolve(b)},getMime(),qSlider.value/100)};img.src=URL.createObjectURL(file)})}function addCard(s,url,size){const d=document.createElement('div');d.className='card';d.innerHTML=`<img src="${url}"><button class="x" onclick="rm(${s},this.parentNode)">✕</button><button class="dl" onclick="dlOne(${s})">⬇</button><div style="padding:8px"><div>${s}.${getExt()}</div><div style="font-size:11px;color:#999">${fmtSize(size)}</div></div>`;grid.appendChild(d)}function rm(s,el){const i=items.findIndex(x=>x.seq===s);i!==-1&&(URL.revokeObjectURL(items[i].url),items.splice(i,1));el.remove();cnt.textContent=items.length;!items.length&&(bar.style.display='none',settings.style.display='none')}function clearAll(){items.forEach(x=>URL.revokeObjectURL(x.url));items=[];seq=1;grid.innerHTML='';bar.style.display='none';settings.style.display='none'}function dlOne(s){const it=items.find(x=>x.seq===s);it&&saveAs(it.blob,`${s}.${getExt()}`)}async function downloadAll(){if(!items.length)return;if(items.length===1)return dlOne(items[0].seq);prog.style.display='block';pt.textContent='打包中...';const zip=new JSZip();items.forEach(it=>zip.file(`${it.seq}.${getExt()}`,it.blob));const blob=await zip.generateAsync({type:'blob',compression:'DEFLATE'},m=>pf.style.width=m.percent.toFixed(0)+'%');saveAs(blob,`clean_${Date.now()}.zip`);pt.textContent='✅ 下载完成';setTimeout(()=>prog.style.display='none',1800)}function fmtSize(b){return b<1024?b+' B':b<1048576?(b/1024).toFixed(1)+' KB':(b/1048576).toFixed(1)+' MB'}function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)}
 <\/script>
 </body>
-</html>
-    `;
-    const doc = window.open().document;
-    doc.write(cleaner);
-    doc.close();
+</html>`;
+    const newTab = window.open();
+    newTab.document.write(cleanerPage);
+    newTab.document.close();
+    sidebarMask.classList.remove('show');
 };
 
-// 原弹窗逻辑（完整保留）
+// ==================== 你原代码的所有JS逻辑，完整保留 ====================
 const welcomeModal = document.getElementById('welcomeModal');
 const donateModal = document.getElementById('donateModal');
 const closeWelcome = document.getElementById('closeWelcome');
@@ -308,7 +287,6 @@ closeWelcome.addEventListener('click',()=>{welcomeModal.classList.remove('show')
 openDonate.addEventListener('click',()=>{welcomeModal.classList.remove('show');setTimeout(()=>{donateModal.classList.add('show');},200);});
 closeDonate.addEventListener('click',()=>{donateModal.classList.remove('show');});
 
-// 原拼图器逻辑（完整保留）
 const uploadBox = document.getElementById('uploadBox');
 const fileInput = document.getElementById('fileInput');
 const selectBtn = document.getElementById('selectBtn');
