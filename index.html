@@ -12,80 +12,40 @@
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,Microsoft YaHei,PingFang SC,sans-serif}
 html,body{width:100%;max-width:100vw;min-height:100vh;overflow-x:hidden;background:#f0f0f0;padding:10px 5px;}
 .container{width:100%;max-width:1920px;margin:0 auto;}
-
-/* 左上角菜单按钮 - 层级低于弹窗，不遮挡 */
-.menu-btn{
-    position:fixed;top:15px;left:15px;z-index:998;
-    width:44px;height:44px;
-    background:#333;color:#fff;
-    border:none;border-radius:8px;
-    font-size:22px;cursor:pointer;
-    display:flex;align-items:center;justify-content:center;
-    transition:all 0.2s ease;
-}
-.menu-btn:hover{opacity:0.9;transform:scale(1.03);}
-
-/* 侧边栏遮罩 - 层级低于弹窗 */
-.sidebar-mask{
-    position:fixed;top:0;left:0;width:100vw;height:100vh;
-    background:rgba(0,0,0,0.5);z-index:998;
-    opacity:0;visibility:hidden;
-    transition:all 0.3s ease;
-}
-.sidebar-mask.show{opacity:1;visibility:visible;}
-
-/* 左侧半屏滑出侧边栏 - 黑白风格 */
-.sidebar{
-    position:fixed;top:0;left:0;width:50vw;height:100vh;
-    background:#333;color:#fff;z-index:999;
-    padding:30px 20px;overflow-y:auto;
-    transform:translateX(-100%);
-    transition:transform 0.4s cubic-bezier(0.16,1,0.3,1);
-}
-.sidebar-mask.show .sidebar{transform:translateX(0);}
-
-/* 侧边栏菜单文字 - 只有去除原数据 */
-.sidebar-item{
-    font-size:18px;font-weight:500;padding:15px 0;
-    cursor:pointer;transition:color 0.2s;
-}
-.sidebar-item:hover{color:#ccc;}
-
-/* 关闭侧边栏按钮 */
-.sidebar-close{
-    position:absolute;top:20px;right:20px;
-    width:36px;height:36px;background:#444;color:#fff;
-    border:none;border-radius:6px;font-size:18px;cursor:pointer;
-}
-
-/* 以下全是你原代码的样式，一丝未改 */
 .header{text-align:center;margin:10px 0 15px;}
 .main{display:flex;gap:15px;flex-direction:column;width:100%;}
+
 @media(min-width:1200px){.main{flex-direction:row;}}
 .left{width:100%;max-width:100%;background:#fff;padding:15px;border-radius:12px;}
 @media(min-width:1200px){.left{max-width:500px;}}
 .right{flex:1;background:#fff;padding:15px;border-radius:12px;min-height:500px;}
+
 .upload-box{border:2px dashed #333;padding:25px;text-align:center;cursor:pointer;margin-bottom:15px;background:#f8f8f8;border-radius:10px;font-size:16px;}
 .upload-box:hover{background:#f0f0f0;}
 .file-input{display:none}
+
 .btn-group{display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;margin-bottom:10px;}
 button{flex:1 1 45%;min-width:120px;padding:14px 10px;background:#333;color:#fff;border:none;border-radius:10px;cursor:pointer;font-size:15px;transition: all 0.2s ease;}
 button:hover{opacity:0.9;transform: scale(1.02);}
 button.download{background:#28a745;width:100%;margin-top:15px;font-size:17px;padding:16px;flex:1 1 100%;}
 button:disabled{background:#999;cursor:not-allowed;transform: none;opacity: 1;}
+
 .column-select,.setting-row{margin:12px 0;display:flex;align-items:center;gap:10px;flex-wrap:wrap;width:100%}
 .setting-row label{min-width:90px;font-size:15px;font-weight:600;flex-shrink:0;}
 .setting-row input[type="range"]{flex:1;min-width:120px;height:32px;}
 .setting-row select{padding:12px 14px;border:1px solid #333;border-radius:10px;font-size:15px;flex:1;min-width:120px;}
+
 .title-input{
   width:100%;padding:12px 15px;font-size:16px;
   border:1px solid #333;border-radius:10px;margin:10px 0;
 }
+
 .preview-box{max-height:400px;overflow-y:auto;background:#f8f8f8;padding:10px;border-radius:10px;margin-top:10px;}
 .item{display:flex;align-items:center;background:#fff;padding:12px;margin-bottom:8px;border-radius:8px;}
 .item img{width:65px;height:65px;object-fit:cover;border-radius:6px;margin-right:12px;flex-shrink:0;}
 .item .name{flex:1;font-size:14px;word-break:break-all;}
 .item .num{font-weight:bold;color:#333;width:40px;text-align:center;font-size:17px;flex-shrink:0;}
+
 .drag-handle{
   width:45px; height:45px;
   display:flex; align-items:center; justify-content:center;
@@ -94,14 +54,17 @@ button:disabled{background:#999;cursor:not-allowed;transform: none;opacity: 1;}
   flex-shrink:0;
 }
 .drag-handle:active{cursor:grabbing;}
+
 .result-box{background:#cccccc;padding:10px;border-radius:10px;margin-top:10px;}
 .result-box img{width:100%;display:block;border-radius:8px;}
+
 .status{padding:12px;margin:10px 0;border-radius:10px;text-align:center;font-size:15px;}
 .status.success{background:#d4edda;color:#155724;display:block}
 .status.error{background:#f8d7da;color:#721c24;display:block}
 .empty{text-align:center;padding:40px;color:#999;font-size:15px;}
 .footer{text-align:center;margin-top:25px;padding-top:15px;color:#999;font-size:13px;}
-/* 弹窗基础样式 + 动画 - 原封不动 */
+
+/* 弹窗基础样式 + 动画 */
 .modal-mask{
   position:fixed;top:0;left:0;width:100%;height:100%;
   background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;
@@ -141,6 +104,8 @@ button:disabled{background:#999;cursor:not-allowed;transform: none;opacity: 1;}
 .modal-btn:hover{transform: translateY(-2px);box-shadow: 0 4px 12px rgba(0,0,0,0.15);}
 .btn-close{background:#6c757d;color:#fff;}
 .btn-donate{background:#e64340;color:#fff;}
+
+/* 打赏图片 高清原比例展示 */
 .donate-img{
   width:100%;height:auto;border-radius:10px;margin-bottom:18px;
   image-rendering: crisp-edges;
@@ -149,19 +114,8 @@ button:disabled{background:#999;cursor:not-allowed;transform: none;opacity: 1;}
 </style>
 </head>
 <body>
-<!-- 1. 左上角三横线菜单按钮 -->
-<button class="menu-btn" id="menuBtn">☰</button>
 
-<!-- 2. 左侧半屏滑出侧边栏 -->
-<div class="sidebar-mask" id="sidebarMask">
-    <div class="sidebar">
-        <button class="sidebar-close" id="closeSidebar">✕</button>
-        <!-- 只有这一行文字：去除原数据 -->
-        <div class="sidebar-item" id="goCleaner">去除原数据</div>
-    </div>
-</div>
-
-<!-- 3. 你原代码的所有弹窗，完整保留，按钮可点 -->
+<!-- 启动欢迎弹窗 -->
 <div id="welcomeModal" class="modal-mask show">
   <div class="modal-box">
     <div class="modal-title">欢迎使用捌壹零拼图器</div>
@@ -178,6 +132,8 @@ button:disabled{background:#999;cursor:not-allowed;transform: none;opacity: 1;}
     </div>
   </div>
 </div>
+
+<!-- 打赏弹窗 -->
 <div id="donateModal" class="modal-mask">
   <div class="modal-box">
     <img class="donate-img" src="https://cdn.mufy.ai/images/3492b8c4-6cf0-4724-7068-26dfe0bffd00/public" alt="打赏">
@@ -185,19 +141,21 @@ button:disabled{background:#999;cursor:not-allowed;transform: none;opacity: 1;}
   </div>
 </div>
 
-<!-- 4. 你原代码的拼图器主体，一丝未改 -->
 <div class="container">
     <div class="header"><h2>捌壹零拼图器</h2></div>
     <div class="main">
         <div class="left">
             <div class="upload-box" id="uploadBox">点击或拖拽上传图片</div>
             <input type="file" id="fileInput" class="file-input" accept="image/*" multiple>
+            
             <input type="text" class="title-input" id="titleText" placeholder="可输入顶部标题（不输则无标题）">
+
             <div class="btn-group">
                 <button id="selectBtn">选择图片</button>
                 <button id="createBtn" disabled>生成拼图</button>
                 <button id="clearBtn" disabled>清空</button>
             </div>
+
             <div class="column-select">
                 <label>每行数量：</label>
                 <select id="columnSelect">
@@ -208,11 +166,13 @@ button:disabled{background:#999;cursor:not-allowed;transform: none;opacity: 1;}
                     <option value="6">6张</option>
                 </select>
             </div>
+
             <div class="setting-row">
                 <label>数字大小：</label>
                 <input type="range" id="numSize" min="30" max="220" value="120">
                 <span id="numSizeVal">120px</span>
             </div>
+
             <div class="setting-row">
                 <label>数字位置：</label>
                 <select id="numPos">
@@ -225,10 +185,12 @@ button:disabled{background:#999;cursor:not-allowed;transform: none;opacity: 1;}
                     <option value="cc">正中</option>
                 </select>
             </div>
+
             <div class="status" id="status"></div>
             <h4 style="margin:15px 0 10px">已选图片（按住 ≡ 拖动排序）<span id="count">0</span></h4>
             <div class="preview-box" id="previewList"></div>
         </div>
+
         <div class="right">
             <h4>拼图预览</h4>
             <div id="result"><div class="empty">生成后显示</div></div>
@@ -240,53 +202,30 @@ button:disabled{background:#999;cursor:not-allowed;transform: none;opacity: 1;}
 
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 <script>
-// ==================== 菜单+侧边栏逻辑（精准满足要求） ====================
-const menuBtn = document.getElementById('menuBtn');
-const sidebarMask = document.getElementById('sidebarMask');
-const closeSidebar = document.getElementById('closeSidebar');
-const goCleaner = document.getElementById('goCleaner');
-
-// 打开侧边栏
-menuBtn.onclick = () => sidebarMask.classList.add('show');
-// 关闭侧边栏
-closeSidebar.onclick = () => sidebarMask.classList.remove('show');
-sidebarMask.onclick = (e) => e.target === sidebarMask && sidebarMask.classList.remove('show');
-
-// 点击【去除原数据】→ 打开新页面（你的清洗器代码）
-goCleaner.onclick = () => {
-    const cleanerPage = `<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>去除原数据</title>
-<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
-<style>:root{--bg:#111;--card:#222;--border:#444;--accent:#fff;--success:#fff;--text:#fff;--dim:#999;--r:10px;}*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,Microsoft YaHei,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:20px;display:flex;justify-content:center}.wrap{max-width:960px;width:100%}header{text-align:center;padding:20px 0}header h1{font-size:24px}.badge{margin-top:10px;display:inline-block;font-size:11px;padding:4px 12px;border-radius:20px;background:#333;border:1px solid #555}.drop{border:2px dashed var(--border);border-radius:var(--r);background:var(--card);padding:40px;text-align:center;cursor:pointer;margin:16px 0}.drop:hover{border-color:#fff;background:#333}.settings{display:none;background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:12px 18px;margin:14px 0;gap:16px;flex-wrap:wrap}.bar{display:none;justify-content:space-between;margin:14px 0}.btn{padding:9px 18px;border:none;border-radius:8px;cursor:pointer}.btn-a{background:#fff;color:#000}.btn-d{background:#444}.prog{display:none;margin:14px 0}.prog-track{height:5px;background:var(--border)}.prog-fill{height:100%;width:0;background:#fff}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;position:relative}.card img{width:100%;aspect-ratio:1;object-fit:cover}.card .x,.card .dl{position:absolute;width:26px;height:26px;border-radius:50%;border:none;opacity:0}.card:hover .x,.card:hover .dl{opacity:1}.card .x{right:6px;background:rgba(0,0,0,.6);color:#fff}.card .dl{left:6px;background:#fff;color:#000}.toast{position:fixed;bottom:28px;right:28px;background:#222;border:1px solid #fff;color:#fff;padding:10px 18px;border-radius:10px;transform:translateY(80px);opacity:0;transition:.3s}.toast.show{transform:translateY(0);opacity:1}</style>
-</head>
-<body>
-<div class="wrap"><header><h1>去除原数据</h1><p>纯本地处理，清除所有元数据</p><span class="badge">🔒不上传服务器</span></header><div class="drop" id="drop"><h3>拖放或点击上传图片</h3><p>PNG/JPG/WebP 批量处理</p><input type="file" id="fi" multiple accept="image/*"></div><div class="settings" id="settings"><label>输出格式：</label><select id="fmt"><option value="png">PNG</option><option value="jpeg">JPG</option><option value="webp" selected>WebP</option></select><label>质量：</label><input type="range" id="q" min="50" max="100" value="95"><span id="qv">95%</span></div><div class="bar" id="bar"><div>已处理 <b id="cnt">0</b> 张</div><div><button class="btn btn-a" onclick="downloadAll()">批量下载ZIP</button><button class="btn btn-d" onclick="clearAll()">清空</button></div></div><div class="prog" id="prog"><div class="prog-track"><div class="prog-fill" id="pf"></div></div><div class="prog-txt" id="pt"></div></div><div class="grid" id="grid"></div></div><div class="toast" id="toast"></div>
-<script>
-const drop=document.getElementById('drop'),fi=document.getElementById('fi'),grid=document.getElementById('grid'),bar=document.getElementById('bar'),settings=document.getElementById('settings'),cnt=document.getElementById('cnt'),qSlider=document.getElementById('q'),qv=document.getElementById('qv'),prog=document.getElementById('prog'),pf=document.getElementById('pf'),pt=document.getElementById('pt');let items=[],seq=1;qSlider.oninput=()=>qv.textContent=qSlider.value+'%';drop.onclick=()=>fi.click();drop.ondragover=e=>{e.preventDefault();drop.classList.add('over')};drop.ondragleave=()=>drop.classList.remove('over');drop.ondrop=e=>{e.preventDefault();drop.classList.remove('over');go([...e.dataTransfer.files].filter(f=>f.type.startsWith('image/')))};fi.onchange=()=>{go([...fi.files]);fi.value=''};function getExt(){const f=document.getElementById('fmt').value;return f==='jpeg'?'jpg':f}function getMime(){return 'image/'+document.getElementById('fmt').value}async function go(files){if(!files.length)return;const total=files.length;prog.style.display='block';for(let i=0;i<total;i++){pt.textContent=`处理中${i+1}/${total}`;pf.style.width=((i+1)/total*100)+'%';const blob=await clean(files[i]);const url=URL.createObjectURL(blob);items.push({seq:seq++,blob,url});addCard(seq-1,url,blob.size)}cnt.textContent=items.length;bar.style.display='flex';settings.style.display='flex';pt.textContent=`✅ ${total}张处理完成`;setTimeout(()=>{prog.style.display='none';pf.style.width='0'},1800);toast(`✅ ${total}张清洗完毕`)}function clean(file){return new Promise(resolve=>{const img=new Image();img.onload=()=>{const c=document.createElement('canvas');c.width=img.naturalWidth;c.height=img.naturalHeight;c.getContext('2d').drawImage(img,0,0);c.toBlob(b=>{URL.revokeObjectURL(img.src);resolve(b)},getMime(),qSlider.value/100)};img.src=URL.createObjectURL(file)})}function addCard(s,url,size){const d=document.createElement('div');d.className='card';d.innerHTML=`<img src="${url}"><button class="x" onclick="rm(${s},this.parentNode)">✕</button><button class="dl" onclick="dlOne(${s})">⬇</button><div style="padding:8px"><div>${s}.${getExt()}</div><div style="font-size:11px;color:#999">${fmtSize(size)}</div></div>`;grid.appendChild(d)}function rm(s,el){const i=items.findIndex(x=>x.seq===s);i!==-1&&(URL.revokeObjectURL(items[i].url),items.splice(i,1));el.remove();cnt.textContent=items.length;!items.length&&(bar.style.display='none',settings.style.display='none')}function clearAll(){items.forEach(x=>URL.revokeObjectURL(x.url));items=[];seq=1;grid.innerHTML='';bar.style.display='none';settings.style.display='none'}function dlOne(s){const it=items.find(x=>x.seq===s);it&&saveAs(it.blob,`${s}.${getExt()}`)}async function downloadAll(){if(!items.length)return;if(items.length===1)return dlOne(items[0].seq);prog.style.display='block';pt.textContent='打包中...';const zip=new JSZip();items.forEach(it=>zip.file(`${it.seq}.${getExt()}`,it.blob));const blob=await zip.generateAsync({type:'blob',compression:'DEFLATE'},m=>pf.style.width=m.percent.toFixed(0)+'%');saveAs(blob,`clean_${Date.now()}.zip`);pt.textContent='✅ 下载完成';setTimeout(()=>prog.style.display='none',1800)}function fmtSize(b){return b<1024?b+' B':b<1048576?(b/1024).toFixed(1)+' KB':(b/1048576).toFixed(1)+' MB'}function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)}
-<\/script>
-</body>
-</html>`;
-    const newTab = window.open();
-    newTab.document.write(cleanerPage);
-    newTab.document.close();
-    sidebarMask.classList.remove('show');
-};
-
-// ==================== 你原代码的所有JS逻辑，完整保留 ====================
+// 弹窗元素
 const welcomeModal = document.getElementById('welcomeModal');
 const donateModal = document.getElementById('donateModal');
 const closeWelcome = document.getElementById('closeWelcome');
 const openDonate = document.getElementById('openDonate');
 const closeDonate = document.getElementById('closeDonate');
-closeWelcome.addEventListener('click',()=>{welcomeModal.classList.remove('show');});
-openDonate.addEventListener('click',()=>{welcomeModal.classList.remove('show');setTimeout(()=>{donateModal.classList.add('show');},200);});
-closeDonate.addEventListener('click',()=>{donateModal.classList.remove('show');});
 
+// 关闭欢迎弹窗（带动画）
+closeWelcome.addEventListener('click',()=>{
+    welcomeModal.classList.remove('show');
+});
+// 打开打赏弹窗
+openDonate.addEventListener('click',()=>{
+    welcomeModal.classList.remove('show');
+    setTimeout(()=>{
+        donateModal.classList.add('show');
+    },200);
+});
+// 关闭打赏弹窗
+closeDonate.addEventListener('click',()=>{
+    donateModal.classList.remove('show');
+});
+
+// 拼图器原有逻辑
 const uploadBox = document.getElementById('uploadBox');
 const fileInput = document.getElementById('fileInput');
 const selectBtn = document.getElementById('selectBtn');
@@ -302,28 +241,42 @@ const numSize = document.getElementById('numSize');
 const numSizeVal = document.getElementById('numSizeVal');
 const numPos = document.getElementById('numPos');
 const titleText = document.getElementById('titleText');
+
 let images = [];
 let numColor = '#ffffff';
 let sortable = null;
 
 numSize.oninput=()=>{numSizeVal.textContent=numSize.value+'px';};
+
 uploadBox.onclick=()=>fileInput.click();
 selectBtn.onclick=()=>fileInput.click();
 uploadBox.ondragover=e=>e.preventDefault();
-uploadBox.ondrop=e=>{e.preventDefault();addFiles(Array.from(e.dataTransfer.files).filter(f=>f.type.startsWith('image/')));};
+uploadBox.ondrop=e=>{
+    e.preventDefault();
+    addFiles(Array.from(e.dataTransfer.files).filter(f=>f.type.startsWith('image/')));
+};
 fileInput.onchange=e=>addFiles(Array.from(e.target.files));
 
 function addFiles(files){
-    if(images.length+files.length>99){show('最多支持99张图片','error');return;}
+    if(images.length+files.length>99){
+        show('最多支持99张图片','error');
+        return;
+    }
     if(files.length===0) return;
-    let loaded=0,fail=0;
+    let loaded=0;
+    let fail=0;
     files.forEach(file=>{
         let r=new FileReader();
         r.onload=e=>{
             let img=new Image();
             img.src=e.target.result;
             img.onload=()=>{
-                images.push({src:e.target.result,name:file.name,width:img.width,height:img.height});
+                images.push({
+                    src:e.target.result,
+                    name:file.name,
+                    width:img.width,
+                    height:img.height
+                });
                 loaded++;
                 if(loaded+fail===files.length){
                     renderPreview();
@@ -332,65 +285,157 @@ function addFiles(files){
                     show(`成功加载${loaded}张图片${fail>0?`,${fail}张加载失败`:''}`,'success');
                 }
             };
-            img.onerror=()=>{fail++;if(loaded+fail===files.length)show(`成功加载${loaded}张图片,${fail}张加载失败`,'error');};
+            img.onerror=()=>{
+                fail++;
+                if(loaded+fail===files.length){
+                    show(`成功加载${loaded}张图片,${fail}张加载失败`,'error');
+                }
+            };
         };
-        r.onerror=()=>{fail++;if(loaded+fail===files.length)show(`成功加载${loaded}张图片,${fail}张加载失败`,'error');};
+        r.onerror=()=>{
+            fail++;
+            if(loaded+fail===files.length){
+                show(`成功加载${loaded}张图片,${fail}张加载失败`,'error');
+            }
+        };
         r.readAsDataURL(file);
     });
 }
 
 function renderPreview(){
-    count.textContent=images.length;previewList.innerHTML='';
-    if(sortable) sortable.destroy();sortable = null;
-    if(!images.length){previewList.innerHTML='<div class="empty">暂无图片</div>';return;}
+    count.textContent=images.length;
+    previewList.innerHTML='';
+    if(sortable) sortable.destroy();
+    sortable = null;
+
+    if(!images.length){
+        previewList.innerHTML='<div class="empty">暂无图片</div>';
+        return;
+    }
     images.forEach((img,idx)=>{
-        let d=document.createElement('div');d.className='item';d.dataset.index=idx;
-        d.innerHTML=`<div class="drag-handle">≡</div><img src="${img.src}"><div class="name">${img.name}</div><div class="num">${idx+1}</div>`;
+        let d=document.createElement('div');
+        d.className='item';
+        d.dataset.index=idx;
+        d.innerHTML=`
+            <div class="drag-handle">≡</div>
+            <img src="${img.src}">
+            <div class="name">${img.name}</div>
+            <div class="num">${idx+1}</div>
+        `;
         previewList.appendChild(d);
     });
     initSortable();
 }
 
 function initSortable(){
-    sortable=new Sortable(previewList,{handle:'.drag-handle',animation:200,delay:150,delayOnTouchOnly:true,touchStartThreshold:10,
+    sortable=new Sortable(previewList,{
+        handle:'.drag-handle',
+        animation:200,
+        delay:150,
+        delayOnTouchOnly:true,
+        touchStartThreshold:10,
         onEnd:function(evt){
-            let oldIdx=evt.oldIndex,newIdx=evt.newIndex;if(oldIdx===newIdx) return;
-            let item=images.splice(oldIdx,1)[0];images.splice(newIdx,0,item);renderPreview();show('顺序已调整','success');
+            let oldIdx=evt.oldIndex;
+            let newIdx=evt.newIndex;
+            if(oldIdx===newIdx) return;
+            let item=images.splice(oldIdx,1)[0];
+            images.splice(newIdx,0,item);
+            renderPreview();
+            show('顺序已调整','success');
         }
     });
 }
 
 createBtn.onclick=async ()=>{
-    if(!images.length){show('请先上传图片','error');return;}
+    if(!images.length){
+        show('请先上传图片','error');
+        return;
+    }
     result.innerHTML='<div style="padding:40px;text-align:center;">高清拼图生成中...</div>';
-    const title = titleText.value.trim();const COL=parseInt(columnSelect.value);const GAP=12;const CW=2400;const BG='#ccc';
-    const FONT_SIZE=parseInt(numSize.value)*2;const POS=numPos.value;const CELL=(CW-(COL+1)*GAP)/COL;
+
+    const title = titleText.value.trim();
+    const COL=parseInt(columnSelect.value);
+    const GAP=12;
+    const CW=2400;
+    const BG='#ccc';
+    const FONT_SIZE=parseInt(numSize.value)*2;
+    const POS=numPos.value;
+    const CELL=(CW-(COL+1)*GAP)/COL;
+
     let imgList=[];
     for(let it of images){
-        let i=new Image();i.src=it.src;
-        await new Promise((r,reject)=>{i.onload=r;i.onerror=reject;}).catch(()=>{});
+        let i=new Image();
+        i.src=it.src;
+        await new Promise((r,reject)=>{
+            i.onload=r;
+            i.onerror=reject;
+        }).catch(()=>{});
         imgList.push(i);
     }
-    let rows=Math.ceil(imgList.length/COL);let rh=[];
+
+    let rows=Math.ceil(imgList.length/COL);
+    let rh=[];
     for(let r=0;r<rows;r++){
         let m=0;
-        for(let c=0;c<COL;c++){let idx=r*COL+c;if(idx>=imgList.length) break;let i=imgList[idx];let h=i.height*CELL/i.width;if(h>m) m=h;}
+        for(let c=0;c<COL;c++){
+            let idx=r*COL+c;
+            if(idx>=imgList.length) break;
+            let i=imgList[idx];
+            let h=i.height*CELL/i.width;
+            if(h>m) m=h;
+        }
         rh.push(m);
     }
-    let titleHeight = title ? 160 : 0;const totalH=titleHeight + rh.reduce((a,b)=>a+b,0)+(rows+1)*GAP;
-    const canvas=document.createElement('canvas');const ctx=canvas.getContext('2d');
-    ctx.imageSmoothingEnabled = false;ctx.imageSmoothingQuality = "low";canvas.width=CW;canvas.height=totalH;
-    ctx.fillStyle=BG;ctx.fillRect(0,0,CW,totalH);
-    if(title){ctx.fillStyle='#ffffff';ctx.fillRect(0,0,CW,titleHeight);ctx.fillStyle='#000000';ctx.font='bold 72px Arial, Microsoft YaHei';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(title,CW/2,titleHeight/2);}
-    ctx.fillStyle=numColor;ctx.font=`bold ${FONT_SIZE}px Arial`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.strokeStyle='#000000';ctx.lineWidth=Math.max(4, FONT_SIZE/8);
+    
+    let titleHeight = title ? 160 : 0;
+    const totalH=titleHeight + rh.reduce((a,b)=>a+b,0)+(rows+1)*GAP;
+    const canvas=document.createElement('canvas');
+    const ctx=canvas.getContext('2d');
+    
+    ctx.imageSmoothingEnabled = false;
+    ctx.imageSmoothingQuality = "low";
+
+    canvas.width=CW;
+    canvas.height=totalH;
+
+    ctx.fillStyle=BG;
+    ctx.fillRect(0,0,CW,totalH);
+
+    if(title){
+        ctx.fillStyle='#ffffff';
+        ctx.fillRect(0,0,CW,titleHeight);
+        ctx.fillStyle='#000000';
+        ctx.font='bold 72px Arial, Microsoft YaHei';
+        ctx.textAlign='center';
+        ctx.textBaseline='middle';
+        ctx.fillText(title,CW/2,titleHeight/2);
+    }
+
+    ctx.fillStyle=numColor;
+    ctx.font=`bold ${FONT_SIZE}px Arial`;
+    ctx.textAlign='center';
+    ctx.textBaseline='middle';
+    ctx.strokeStyle='#000000';
+    ctx.lineWidth=Math.max(4, FONT_SIZE/8);
+
     let cy=GAP + titleHeight;
     for(let r=0;r<rows;r++){
         let h=rh[r];
         for(let c=0;c<COL;c++){
-            let idx=r*COL+c;if(idx>=imgList.length) break;
-            let i=imgList[idx],n=idx+1,x=GAP+c*(CELL+GAP),w=CELL,ih=i.height*w/i.width,oy=cy+(h-ih)/2;
+            let idx=r*COL+c;
+            if(idx>=imgList.length) break;
+            let i=imgList[idx];
+            let n=idx+1;
+            let x=GAP+c*(CELL+GAP);
+            let w=CELL;
+            let ih=i.height*w/i.width;
+            let oy=cy+(h-ih)/2;
+
             ctx.drawImage(i,x,oy,w,ih);
-            let nx=x+w/2, ny=oy+ih/2;ctx.textAlign='center';ctx.textBaseline='middle';
+
+            let nx=x+w/2, ny=oy+ih/2;
+            ctx.textAlign='center';
+            ctx.textBaseline='middle';
             if(POS==='tl'){nx=x+10;ny=oy+10;ctx.textAlign='left';ctx.textBaseline='top';}
             if(POS==='tr'){nx=x+w-10;ny=oy+10;ctx.textAlign='right';ctx.textBaseline='top';}
             if(POS==='bl'){nx=x+10;ny=oy+ih-10;ctx.textAlign='left';ctx.textBaseline='bottom';}
@@ -398,28 +443,48 @@ createBtn.onclick=async ()=>{
             if(POS==='tc'){nx=x+w/2;ny=oy+10;ctx.textAlign='center';ctx.textBaseline='top';}
             if(POS==='bc'){nx=x+w/2;ny=oy+ih-10;ctx.textAlign='center';ctx.textBaseline='bottom';}
             if(POS==='cc'){nx=x+w/2;ny=oy+ih/2;ctx.textAlign='center';ctx.textBaseline='middle';}
-            ctx.strokeText(n, nx, ny);ctx.fillText(n, nx, ny);
+            
+            ctx.strokeText(n, nx, ny);
+            ctx.fillText(n, nx, ny);
         }
         cy+=h+GAP;
     }
+
+    // 导出图片 100%高清无压缩
     let url=canvas.toDataURL('image/png', 1.0);
     result.innerHTML=`<div class="result-box"><img src="${url}" id="finalImg"></div>`;
-    downloadBtn.style.display='inline-block';show('高清无损拼图生成完成', 'success');
+    downloadBtn.style.display='inline-block';
+    show('高清无损拼图生成完成', 'success');
 };
 
 downloadBtn.onclick=()=>{
-    let img=document.getElementById('finalImg');if(!img) return;
-    let a=document.createElement('a');a.download=`捌壹零高清拼图_${Date.now()}.png`;a.href=img.src;a.click();
+    let img=document.getElementById('finalImg');
+    if(!img) return;
+    let a=document.createElement('a');
+    a.download=`捌壹零高清拼图_${Date.now()}.png`;
+    a.href=img.src;
+    a.click();
     show('高清拼图已开始下载','success');
 };
 
 clearBtn.onclick=()=>{
-    images.length = 0;fileInput.value = '';titleText.value = '';renderPreview();
-    result.innerHTML='<div class="empty">生成后显示</div>';downloadBtn.style.display='none';
-    createBtn.disabled = true;clearBtn.disabled = true;show('已清空所有内容','success');
+    images.length = 0;
+    fileInput.value = '';
+    titleText.value = '';
+    renderPreview();
+    result.innerHTML='<div class="empty">生成后显示</div>';
+    downloadBtn.style.display='none';
+    createBtn.disabled = true;
+    clearBtn.disabled = true;
+    show('已清空所有内容','success');
 };
 
-function show(msg,t){status.textContent=msg;status.className=`status ${t}`;setTimeout(()=>status.className='status',3000);}
+function show(msg,t){
+    status.textContent=msg;
+    status.className=`status ${t}`;
+    setTimeout(()=>status.className='status',3000);
+}
+
 renderPreview();
 </script>
 </body>
