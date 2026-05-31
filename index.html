@@ -11,124 +11,21 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,Microsoft YaHei,PingFang SC,sans-serif}
 html,body{width:100%;max-width:100vw;min-height:100vh;overflow-x:hidden;background:#f0f0f0;padding:10px 5px;}
-.container{width:100%;max-width:1920px;margin:0 auto;position:relative;}
+.container{width:100%;max-width:1920px;margin:0 auto;}
 
 /* 左上角菜单按钮 */
 .menu-btn{
-    position:fixed;top:15px;left:15px;z-index:9998;
-    width:45px;height:45px;
+    position:fixed;top:15px;left:15px;z-index:999;
+    width:44px;height:44px;
     background:#333;color:#fff;
     border:none;border-radius:8px;
     font-size:22px;cursor:pointer;
     display:flex;align-items:center;justify-content:center;
-    transition:all 0.3s ease;
+    transition:all 0.2s ease;
 }
-.menu-btn:hover{opacity:0.9;transform:scale(1.05);}
+.menu-btn:hover{opacity:0.9;transform:scale(1.03);}
 
-/* 侧边栏遮罩 + 滑出动画 */
-.sidebar-mask{
-    position:fixed;top:0;left:0;width:100vw;height:100vh;
-    background:rgba(0,0,0,0.6);z-index:9999;
-    opacity:0;visibility:hidden;
-    transition:all 0.3s ease;
-}
-.sidebar-mask.show{opacity:1;visibility:visible;}
-
-/* 半屏侧边栏 */
-.sidebar{
-    position:fixed;top:0;left:0;width:50vw;height:100vh;
-    background:#333;color:#fff;z-index:10000;
-    padding:20px;overflow-y:auto;
-    transform:translateX(-100%);
-    transition:transform 0.4s cubic-bezier(0.16,1,0.3,1);
-}
-.sidebar-mask.show .sidebar{transform:translateX(0);}
-.sidebar-header{
-    display:flex;justify-content:space-between;align-items:center;
-    margin-bottom:20px;padding-bottom:15px;border-bottom:1px solid #555;
-}
-.sidebar-header h3{font-size:18px;font-weight:600;}
-.sidebar-close{
-    background:#444;color:#fff;border:none;
-    width:36px;height:36px;border-radius:6px;
-    font-size:18px;cursor:pointer;
-}
-.sidebar-close:hover{background:#555;}
-
-/* 清除原数据模块样式（黑白适配） */
-.clean-wrap{width:100%;}
-.clean-drop{
-    border:2px dashed #555;padding:30px 15px;text-align:center;
-    cursor:pointer;border-radius:10px;background:#444;margin:15px 0;
-    transition:0.2s ease;
-}
-.clean-drop:hover,.clean-drop.over{border-color:#fff;background:#555;}
-.clean-drop h4{font-size:16px;margin-bottom:8px;}
-.clean-drop p{font-size:13px;color:#ccc;}
-.clean-drop input{display:none;}
-.clean-settings{
-    display:none;gap:15px;align-items:center;flex-wrap:wrap;
-    padding:12px;background:#444;border-radius:8px;margin-bottom:15px;
-}
-.clean-settings label{font-size:14px;min-width:70px;}
-.clean-settings select,.clean-settings input[type="range"]{
-    background:#555;color:#fff;border:1px solid #666;
-    padding:6px 8px;border-radius:6px;
-}
-.clean-bar{
-    display:none;justify-content:space-between;align-items:center;
-    margin-bottom:15px;
-}
-.clean-bar .info{font-size:14px;color:#ccc;}
-.clean-bar .info b{color:#fff;}
-.clean-btn{
-    padding:8px 14px;border:none;border-radius:6px;
-    cursor:pointer;font-size:13px;background:#444;color:#fff;
-}
-.clean-btn.primary{background:#fff;color:#333;}
-.clean-btn.danger{background:#d32f2f;color:#fff;}
-.clean-prog{
-    display:none;margin-bottom:15px;
-}
-.clean-prog .track{
-    height:6px;background:#555;border-radius:3px;overflow:hidden;
-}
-.clean-prog .fill{
-    height:100%;width:0;background:#fff;transition:width 0.2s;
-}
-.clean-prog .text{
-    font-size:12px;color:#ccc;margin-top:5px;text-align:center;
-}
-.clean-grid{
-    display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;
-}
-.clean-card{
-    background:#444;border-radius:8px;overflow:hidden;position:relative;
-}
-.clean-card img{width:100%;aspect-ratio:1;object-fit:cover;display:block;}
-.clean-card .btns{
-    position:absolute;top:5px;left:5px;right:5px;
-    display:flex;justify-content:space-between;
-    opacity:0;transition:0.2s;
-}
-.clean-card:hover .btns{opacity:1;}
-.clean-card .btn{
-    width:28px;height:28px;border-radius:50%;border:none;
-    background:rgba(0,0,0,0.6);color:#fff;cursor:pointer;
-    display:flex;align-items:center;justify-content:center;font-size:12px;
-}
-.clean-card .info{padding:8px;font-size:12px;}
-.clean-card .name{color:#fff;font-weight:600;margin-bottom:4px;}
-.clean-card .size{color:#ccc;font-size:11px;}
-.clean-toast{
-    position:fixed;bottom:20px;left:50%;transform:translate(-50%,80px);
-    background:#444;color:#fff;padding:10px 16px;border-radius:8px;
-    font-size:13px;opacity:0;transition:0.3s;z-index:10001;
-}
-.clean-toast.show{transform:translate(-50%,0);opacity:1;}
-
-/* 原拼图器样式 */
-.header{text-align:center;margin:10px 0 15px;padding-top:10px;}
+.header{text-align:center;margin:10px 0 15px;}
 .main{display:flex;gap:15px;flex-direction:column;width:100%;}
 @media(min-width:1200px){.main{flex-direction:row;}}
 .left{width:100%;max-width:100%;background:#fff;padding:15px;border-radius:12px;}
@@ -219,50 +116,27 @@ button:disabled{background:#999;cursor:not-allowed;transform: none;opacity: 1;}
 </style>
 </head>
 <body>
-<!-- 左上角菜单按钮 -->
+<!-- 左上角三横线菜单 → 点击打开新页面（清除原数据） -->
 <button class="menu-btn" id="menuBtn">☰</button>
 
-<!-- 侧边栏（清除原数据功能） -->
-<div class="sidebar-mask" id="sidebarMask">
-    <div class="sidebar">
-        <div class="sidebar-header">
-            <h3>清除原数据</h3>
-            <button class="sidebar-close" id="closeSidebar">✕</button>
-        </div>
-        <div class="clean-wrap">
-            <div class="clean-drop" id="cleanDrop">
-                <h4>拖放或点击上传图片</h4>
-                <p>PNG/JPG/WebP，自动清除元数据</p>
-                <input type="file" id="cleanFile" multiple accept="image/*">
-            </div>
-            <div class="clean-settings" id="cleanSettings">
-                <label>输出格式：</label>
-                <select id="cleanFmt">
-                    <option value="png">PNG</option>
-                    <option value="jpeg">JPG</option>
-                    <option value="webp" selected>WebP</option>
-                </select>
-                <label>质量：</label>
-                <input type="range" id="cleanQuality" min="50" max="100" value="95">
-                <span id="qualityVal">95%</span>
-            </div>
-            <div class="clean-bar" id="cleanBar">
-                <div class="info">已处理 <b id="cleanCount">0</b> 张</div>
-                <div>
-                    <button class="clean-btn primary" onclick="downloadCleanAll()">批量下载ZIP</button>
-                    <button class="clean-btn danger" onclick="clearCleanAll()">清空</button>
-                </div>
-            </div>
-            <div class="clean-prog" id="cleanProg">
-                <div class="track"><div class="fill" id="cleanFill"></div></div>
-                <div class="text" id="cleanText"></div>
-            </div>
-            <div class="clean-grid" id="cleanGrid"></div>
-        </div>
+<!-- 启动欢迎弹窗（完整保留） -->
+<div id="welcomeModal" class="modal-mask show">
+  <div class="modal-box">
+    <div class="modal-title">欢迎使用捌壹零拼图器</div>
+    <div class="modal-content">
+欢迎使用捌壹零的拼图器<br><br>
+拼图器最多能放99张，每行数量有2、3、4、5、6（注意是每行不是每列）<br><br>
+你们的图片不会上传到服务器，我也看不到，请放心使用<br><br>
+由于每个人手机+设置的不同，所看到的页面大小也不同，页面或大或小都是正常现象哦，如果是chrome浏览器可以点开右上角三个小点，然后往下看，有个缩放，往后拉可以让页面看起来没这么紧凑，至于其他的浏览器，我还不知道该怎么做(￣ェ￣;)<br><br>
+后续会陆续推出新的功能，敬请期待吧
     </div>
+    <div class="modal-btn-group">
+      <button class="modal-btn btn-close" id="closeWelcome">关闭</button>
+      <button class="modal-btn btn-donate" id="openDonate">打赏</button>
+    </div>
+  </div>
 </div>
-
-<!-- 打赏弹窗 -->
+<!-- 打赏弹窗（完整保留） -->
 <div id="donateModal" class="modal-mask">
   <div class="modal-box">
     <img class="donate-img" src="https://cdn.mufy.ai/images/3492b8c4-6cf0-4724-7068-26dfe0bffd00/public" alt="打赏">
@@ -323,149 +197,118 @@ button:disabled{background:#999;cursor:not-allowed;transform: none;opacity: 1;}
     <div class="footer">捌壹零拼图器 | 原图高清无损 不压缩不模糊</div>
 </div>
 
-<!-- 依赖库 -->
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+<script>
+// 菜单按钮：打开新页面 → 清除原数据工具
+document.getElementById('menuBtn').onclick = function(){
+    window.open('','cleaner','width=1000,height=800');
+    const cleaner = `
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>清除原数据</title>
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
-
+<style>
+:root {--bg: #111;--card: #222;--border: #444;--accent: #fff;--success: #fff;--text: #fff;--dim: #999;--r: 10px;}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {font-family: Arial,Microsoft YaHei,sans-serif;background: var(--bg);color: var(--text);min-height: 100vh;padding: 20px;display: flex;justify-content: center;}
+.wrap { max-width: 960px; width: 100%; }
+header { text-align: center; padding: 20px 0 15px; }
+header h1 {font-size: 24px;color: var(--text);}
+header p { color: var(--dim); font-size: 13px; margin-top: 6px; }
+.badge {display: inline-block;margin-top: 10px;font-size: 11px;padding: 4px 12px;border-radius: 20px;background: #333;border: 1px solid #555;color: var(--text);}
+.drop {border: 2px dashed var(--border);border-radius: var(--r);background: var(--card);padding: 40px 20px;text-align: center;cursor: pointer;transition: .2s;margin: 16px 0;}
+.drop:hover, .drop.over { border-color: var(--accent); background: #333; }
+.drop h3 { font-size: 16px; margin: 10px 0 4px; }
+.drop p { color: var(--dim); font-size: 13px; }
+.drop input { display: none; }
+.settings {display: none;background: var(--card);border: 1px solid var(--border);border-radius: var(--r);padding: 12px 18px;margin-bottom: 14px;align-items: center;gap: 16px;flex-wrap: wrap;font-size: 13px;}
+.settings label { color: var(--dim); }
+.settings select {background: var(--bg);border: 1px solid var(--border);color: var(--text);padding: 5px 10px;border-radius: 6px;font-size: 13px;}
+.settings input[type=range] { accent-color: var(--accent); }
+.qv { color: var(--accent); font-weight: 600; min-width: 32px; display: inline-block; }
+.bar {display: none;justify-content: space-between;align-items: center;flex-wrap: wrap;gap: 10px;margin-bottom: 14px;}
+.bar .info { color: var(--dim); font-size: 14px; }
+.bar .info b { color: var(--accent); }
+.btns { display: flex; gap: 8px; flex-wrap: wrap; }
+.btn {padding: 9px 18px;border: none;border-radius: 8px;font-size: 13px;font-weight: 500;cursor: pointer;transition: .2s;display: inline-flex;align-items: center;gap: 5px;}
+.btn:disabled { opacity: .4; cursor: not-allowed; }
+.btn-a { background: #fff; color: #000; }
+.btn-a:hover:not(:disabled) { background: #eee; }
+.btn-d { background: #444; color: #fff; }
+.btn-d:hover:not(:disabled) { background: #555; }
+.prog { display: none; margin-bottom: 14px; }
+.prog-track { height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; }
+.prog-fill { height: 100%; width: 0; background: #fff; border-radius: 3px; transition: width .2s; }
+.prog-txt { text-align: center; font-size: 12px; color: var(--dim); margin-top: 5px; }
+.grid {display: grid;grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));gap: 12px;}
+.card {background: var(--card);border: 1px solid var(--border);border-radius: var(--r);overflow: hidden;position: relative;transition: .2s;}
+.card:hover { border-color: var(--accent); }
+.card img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; background: #111; }
+.card .info { padding: 8px 10px; }
+.card .name { font-size: 12px; font-weight: 600; color: var(--success); }
+.card .size { font-size: 11px; color: var(--dim); margin-top: 2px; }
+.card .x {position: absolute; top: 6px; right: 6px;width: 26px; height: 26px; border-radius: 50%;border: none; background: rgba(0,0,0,.6); color: #fff;cursor: pointer; font-size: 13px;display: flex; align-items: center; justify-content: center;opacity: 0; transition: .2s;}
+.card:hover .x { opacity: 1; }
+.card .dl {position: absolute; top: 6px; left: 6px;width: 26px; height: 26px; border-radius: 50%;border: none; background: rgba(255,255,255,.8); color: #000;cursor: pointer; font-size: 12px;display: flex; align-items: center; justify-content: center;opacity: 0; transition: .2s;}
+.card:hover .dl { opacity: 1; }
+.toast {position: fixed; bottom: 28px; right: 28px;background: var(--card); border: 1px solid #fff;color: #fff; padding: 10px 18px; border-radius: 10px;font-size: 13px; z-index: 99;transform: translateY(80px); opacity: 0; transition: .3s;}
+.toast.show { transform: translateY(0); opacity: 1; }
+@media(max-width:500px) { .grid { grid-template-columns: repeat(2,1fr); } }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><h1>清除原数据</h1><p>上传即清除所有元数据，纯本地处理</p><span class="badge">🔒不上传服务器</span></header>
+<div class="drop" id="drop"><div>📁</div><h3>拖放或点击上传图片</h3><p>PNG/JPG/WebP 批量处理</p><input type="file" id="fi" multiple accept="image/*"></div>
+<div class="settings" id="settings"><label>输出格式：</label><select id="fmt"><option value="png">PNG</option><option value="jpeg">JPG</option><option value="webp" selected>WebP</option></select><label>质量：</label><input type="range" id="q" min="50" max="100" value="95"><span class="qv" id="qv">95%</span></div>
+<div class="bar" id="bar"><div class="info">已处理 <b id="cnt">0</b> 张</div><div class="btns"><button class="btn btn-a" onclick="downloadAll()">📦 批量下载ZIP</button><button class="btn btn-d" onclick="clearAll()">🗑️ 清空</button></div></div>
+<div class="prog" id="prog"><div class="prog-track"><div class="prog-fill" id="pf"></div></div><div class="prog-txt" id="pt"></div></div>
+<div class="grid" id="grid"></div>
+</div>
+<div class="toast" id="toast"></div>
 <script>
-// ==================== 侧边栏菜单逻辑 ====================
-const menuBtn = document.getElementById('menuBtn');
-const sidebarMask = document.getElementById('sidebarMask');
-const closeSidebar = document.getElementById('closeSidebar');
-menuBtn.addEventListener('click',()=>{sidebarMask.classList.add('show');});
-closeSidebar.addEventListener('click',()=>{sidebarMask.classList.remove('show');});
-sidebarMask.addEventListener('click',(e)=>{if(e.target===sidebarMask) sidebarMask.classList.remove('show');});
-
-// ==================== 清除原数据功能逻辑 ====================
-const cleanDrop = document.getElementById('cleanDrop');
-const cleanFile = document.getElementById('cleanFile');
-const cleanGrid = document.getElementById('cleanGrid');
-const cleanBar = document.getElementById('cleanBar');
-const cleanSettings = document.getElementById('cleanSettings');
-const cleanCount = document.getElementById('cleanCount');
-const cleanQuality = document.getElementById('cleanQuality');
-const qualityVal = document.getElementById('qualityVal');
-const cleanProg = document.getElementById('cleanProg');
-const cleanFill = document.getElementById('cleanFill');
-const cleanText = document.getElementById('cleanText');
-let cleanItems = [];
-let cleanSeq = 1;
-cleanQuality.oninput = ()=>{qualityVal.textContent = cleanQuality.value+'%';};
-cleanDrop.onclick = ()=>cleanFile.click();
-cleanDrop.ondragover = (e)=>{e.preventDefault();cleanDrop.classList.add('over');};
-cleanDrop.ondragleave = ()=>{cleanDrop.classList.remove('over');};
-cleanDrop.ondrop = (e)=>{
-    e.preventDefault();cleanDrop.classList.remove('over');
-    processCleanFiles([...e.dataTransfer.files].filter(f=>f.type.startsWith('image/')));
-};
-cleanFile.onchange = ()=>{processCleanFiles([...cleanFile.files]);cleanFile.value='';};
-
-function getCleanExt(){const f=document.getElementById('cleanFmt').value;return f==='jpeg'?'jpg':f;}
-function getCleanMime(){const f=document.getElementById('cleanFmt').value;return 'image/'+f;}
-
-async function processCleanFiles(files){
-    if(!files.length) return;
-    const total = files.length;
-    cleanProg.style.display='block';
-    for(let i=0;i<total;i++){
-        cleanText.textContent=`处理中 ${i+1}/${total}`;
-        cleanFill.style.width=((i+1)/total*100)+'%';
-        const blob = await cleanImage(files[i]);
-        const url = URL.createObjectURL(blob);
-        const s = cleanSeq++;
-        cleanItems.push({seq:s,blob,url});
-        addCleanCard(s,url,blob.size);
-    }
-    cleanCount.textContent=cleanItems.length;
-    cleanBar.style.display='flex';
-    cleanSettings.style.display='flex';
-    cleanText.textContent=`✅ 完成 ${total} 张`;
-    setTimeout(()=>{cleanProg.style.display='none';cleanFill.style.width='0';},1800);
-    showCleanToast(`✅ 已清洗 ${total} 张图片`);
-}
-
-async function cleanImage(file){
-    return new Promise(resolve=>{
-        const img = new Image();
-        img.onload=()=>{
-            const c=document.createElement('canvas');
-            c.width=img.naturalWidth;c.height=img.naturalHeight;
-            c.getContext('2d').drawImage(img,0,0);
-            c.toBlob(b=>{URL.revokeObjectURL(img.src);resolve(b);},getCleanMime(),cleanQuality.value/100);
-        };
-        img.src=URL.createObjectURL(file);
-    });
-}
-
-function addCleanCard(seq,url,size){
-    const ext=getCleanExt();
-    const d=document.createElement('div');
-    d.className='clean-card';
-    d.innerHTML=`
-        <img src="${url}" loading="lazy">
-        <div class="btns">
-            <button class="btn dl" onclick="downloadOneClean(${seq})">⬇</button>
-            <button class="btn del" onclick="removeCleanCard(${seq},this.parentElement.parentElement)">✕</button>
-        </div>
-        <div class="info">
-            <div class="name">${seq}.${ext}</div>
-            <div class="size">${formatSize(size)}</div>
-        </div>
+const drop=document.getElementById('drop');const fi=document.getElementById('fi');const grid=document.getElementById('grid');const bar=document.getElementById('bar');const settings=document.getElementById('settings');const cnt=document.getElementById('cnt');const qSlider=document.getElementById('q');const qv=document.getElementById('qv');const prog=document.getElementById('prog');const pf=document.getElementById('pf');const pt=document.getElementById('pt');let items=[];let seq=1;
+qSlider.oninput=()=>qv.textContent=qSlider.value+'%';
+drop.onclick=()=>fi.click();
+drop.ondragover=e=>{e.preventDefault();drop.classList.add('over');};
+drop.ondragleave=()=>drop.classList.remove('over');
+drop.ondrop=e=>{e.preventDefault();drop.classList.remove('over');go([...e.dataTransfer.files].filter(f=>f.type.startsWith('image/')));};
+fi.onchange=()=>{go([...fi.files]);fi.value='';};
+function getExt(){const f=document.getElementById('fmt').value;return f==='jpeg'?'jpg':f;}
+function getMime(){const f=document.getElementById('fmt').value;return 'image/'+f;}
+async function go(files){if(!files.length)return;const total=files.length;prog.style.display='block';for(let i=0;i<total;i++){pt.textContent=\`处理中\${i+1}/\${total}\`;pf.style.width=((i+1)/total*100)+'%';const blob=await clean(files[i]);const url=URL.createObjectURL(blob);const s=seq++;items.push({seq:s,blob,url});addCard(s,url,blob.size);}cnt.textContent=items.length;bar.style.display='flex';settings.style.display='flex';pt.textContent=\`✅ \${total} 张处理完成\`;setTimeout(()=>{prog.style.display='none';pf.style.width='0';},1800);toast(\`✅ \${total} 张图片已清洗完毕\`);}
+function clean(file){return new Promise(resolve=>{const img=new Image();img.onload=()=>{const c=document.createElement('canvas');c.width=img.naturalWidth;c.height=img.naturalHeight;c.getContext('2d').drawImage(img,0,0);c.toBlob(b=>{URL.revokeObjectURL(img.src);resolve(b);},getMime(),+qSlider.value/100);};img.src=URL.createObjectURL(file);});}
+function addCard(s,url,size){const ext=getExt();const d=document.createElement('div');d.className='card';d.dataset.seq=s;d.innerHTML=\`<img src="\${url}" loading="lazy"><button class="x" onclick="rm(\${s},this.parentNode)">✕</button><button class="dl" onclick="dlOne(\${s})">⬇</button><div class="info"><div class="name">\${s}.\${ext}</div><div class="size">\${fmtSize(size)}</div></div>\`;grid.appendChild(d);}
+function rm(s,el){const i=items.findIndex(x=>x.seq===s);if(i!==-1){URL.revokeObjectURL(items[i].url);items.splice(i,1);}el.remove();cnt.textContent=items.length;if(!items.length){bar.style.display='none';settings.style.display='none';}}
+function clearAll(){items.forEach(x=>URL.revokeObjectURL(x.url));items=[];seq=1;grid.innerHTML='';bar.style.display='none';settings.style.display='none';}
+function dlOne(s){const it=items.find(x=>x.seq===s);if(it)saveAs(it.blob,s+'.'+getExt());}
+async function downloadAll(){if(!items.length)return;if(items.length===1){dlOne(items[0].seq);return;}prog.style.display='block';pt.textContent='打包中...';const zip=new JSZip();const ext=getExt();items.forEach(it=>zip.file(it.seq+'.'+ext,it.blob));const blob=await zip.generateAsync({type:'blob',compression:'DEFLATE'},m=>{pf.style.width=m.percent.toFixed(0)+'%';});saveAs(blob,\`clean_\${Date.now()}.zip\`);pt.textContent='✅ 下载完成';setTimeout(()=>{prog.style.display='none';pf.style.width='0';},1800);}
+function fmtSize(b){if(b<1024)return b+' B';if(b<1048576)return (b/1024).toFixed(1)+' KB';return (b/1048576).toFixed(1)+' MB';}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
+<\/script>
+</body>
+</html>
     `;
-    cleanGrid.appendChild(d);
-}
+    const doc = window.open().document;
+    doc.write(cleaner);
+    doc.close();
+};
 
-function removeCleanCard(seq,el){
-    const idx=cleanItems.findIndex(x=>x.seq===seq);
-    if(idx!==-1){URL.revokeObjectURL(cleanItems[idx].url);cleanItems.splice(idx,1);}
-    el.remove();
-    cleanCount.textContent=cleanItems.length;
-    if(cleanItems.length===0){cleanBar.style.display='none';cleanSettings.style.display='none';}
-}
-
-function clearCleanAll(){
-    cleanItems.forEach(x=>URL.revokeObjectURL(x.url));
-    cleanItems=[];cleanSeq=1;cleanGrid.innerHTML='';
-    cleanBar.style.display='none';cleanSettings.style.display='none';
-}
-
-function downloadOneClean(seq){
-    const item=cleanItems.find(x=>x.seq===seq);
-    if(item) saveAs(item.blob,`${seq}.${getCleanExt()}`);
-}
-
-async function downloadCleanAll(){
-    if(!cleanItems.length) return;
-    if(cleanItems.length===1){downloadOneClean(cleanItems[0].seq);return;}
-    cleanProg.style.display='block';cleanText.textContent='打包中...';
-    const zip=new JSZip();const ext=getCleanExt();
-    cleanItems.forEach(it=>zip.file(`${it.seq}.${ext}`,it.blob));
-    const blob=await zip.generateAsync({type:'blob',compression:'DEFLATE'},m=>{
-        cleanFill.style.width=m.percent.toFixed(0)+'%';
-    });
-    saveAs(blob,`clean_images_${Date.now()}.zip`);
-    cleanText.textContent='✅ 下载完成';
-    setTimeout(()=>{cleanProg.style.display='none';cleanFill.style.width='0';},1800);
-}
-
-function formatSize(b){
-    if(b<1024)return b+' B';
-    if(b<1048576)return (b/1024).toFixed(1)+' KB';
-    return (b/1048576).toFixed(1)+' MB';
-}
-
-function showCleanToast(msg){
-    const t=document.createElement('div');t.className='clean-toast';t.textContent=msg;
-    document.body.appendChild(t);setTimeout(()=>t.classList.add('show'),10);
-    setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.remove(),300);},2500);
-}
-
-// ==================== 原拼图器逻辑 ====================
+// 原弹窗逻辑（完整保留）
+const welcomeModal = document.getElementById('welcomeModal');
 const donateModal = document.getElementById('donateModal');
+const closeWelcome = document.getElementById('closeWelcome');
+const openDonate = document.getElementById('openDonate');
 const closeDonate = document.getElementById('closeDonate');
+closeWelcome.addEventListener('click',()=>{welcomeModal.classList.remove('show');});
+openDonate.addEventListener('click',()=>{welcomeModal.classList.remove('show');setTimeout(()=>{donateModal.classList.add('show');},200);});
 closeDonate.addEventListener('click',()=>{donateModal.classList.remove('show');});
 
+// 原拼图器逻辑（完整保留）
 const uploadBox = document.getElementById('uploadBox');
 const fileInput = document.getElementById('fileInput');
 const selectBtn = document.getElementById('selectBtn');
@@ -489,32 +332,20 @@ numSize.oninput=()=>{numSizeVal.textContent=numSize.value+'px';};
 uploadBox.onclick=()=>fileInput.click();
 selectBtn.onclick=()=>fileInput.click();
 uploadBox.ondragover=e=>e.preventDefault();
-uploadBox.ondrop=e=>{
-    e.preventDefault();
-    addFiles(Array.from(e.dataTransfer.files).filter(f=>f.type.startsWith('image/')));
-};
+uploadBox.ondrop=e=>{e.preventDefault();addFiles(Array.from(e.dataTransfer.files).filter(f=>f.type.startsWith('image/')));};
 fileInput.onchange=e=>addFiles(Array.from(e.target.files));
 
 function addFiles(files){
-    if(images.length+files.length>99){
-        show('最多支持99张图片','error');
-        return;
-    }
+    if(images.length+files.length>99){show('最多支持99张图片','error');return;}
     if(files.length===0) return;
-    let loaded=0;
-    let fail=0;
+    let loaded=0,fail=0;
     files.forEach(file=>{
         let r=new FileReader();
         r.onload=e=>{
             let img=new Image();
             img.src=e.target.result;
             img.onload=()=>{
-                images.push({
-                    src:e.target.result,
-                    name:file.name,
-                    width:img.width,
-                    height:img.height
-                });
+                images.push({src:e.target.result,name:file.name,width:img.width,height:img.height});
                 loaded++;
                 if(loaded+fail===files.length){
                     renderPreview();
@@ -523,146 +354,65 @@ function addFiles(files){
                     show(`成功加载${loaded}张图片${fail>0?`,${fail}张加载失败`:''}`,'success');
                 }
             };
-            img.onerror=()=>{
-                fail++;
-                if(loaded+fail===files.length){
-                    show(`成功加载${loaded}张图片,${fail}张加载失败`,'error');
-                }
-            };
+            img.onerror=()=>{fail++;if(loaded+fail===files.length)show(`成功加载${loaded}张图片,${fail}张加载失败`,'error');};
         };
-        r.onerror=()=>{
-            fail++;
-            if(loaded+fail===files.length){
-                show(`成功加载${loaded}张图片,${fail}张加载失败`,'error');
-            }
-        };
+        r.onerror=()=>{fail++;if(loaded+fail===files.length)show(`成功加载${loaded}张图片,${fail}张加载失败`,'error');};
         r.readAsDataURL(file);
     });
 }
 
 function renderPreview(){
-    count.textContent=images.length;
-    previewList.innerHTML='';
-    if(sortable) sortable.destroy();
-    sortable = null;
-    if(!images.length){
-        previewList.innerHTML='<div class="empty">暂无图片</div>';
-        return;
-    }
+    count.textContent=images.length;previewList.innerHTML='';
+    if(sortable) sortable.destroy();sortable = null;
+    if(!images.length){previewList.innerHTML='<div class="empty">暂无图片</div>';return;}
     images.forEach((img,idx)=>{
-        let d=document.createElement('div');
-        d.className='item';
-        d.dataset.index=idx;
-        d.innerHTML=`
-            <div class="drag-handle">≡</div>
-            <img src="${img.src}">
-            <div class="name">${img.name}</div>
-            <div class="num">${idx+1}</div>
-        `;
+        let d=document.createElement('div');d.className='item';d.dataset.index=idx;
+        d.innerHTML=`<div class="drag-handle">≡</div><img src="${img.src}"><div class="name">${img.name}</div><div class="num">${idx+1}</div>`;
         previewList.appendChild(d);
     });
     initSortable();
 }
 
 function initSortable(){
-    sortable=new Sortable(previewList,{
-        handle:'.drag-handle',
-        animation:200,
-        delay:150,
-        delayOnTouchOnly:true,
-        touchStartThreshold:10,
+    sortable=new Sortable(previewList,{handle:'.drag-handle',animation:200,delay:150,delayOnTouchOnly:true,touchStartThreshold:10,
         onEnd:function(evt){
-            let oldIdx=evt.oldIndex;
-            let newIdx=evt.newIndex;
-            if(oldIdx===newIdx) return;
-            let item=images.splice(oldIdx,1)[0];
-            images.splice(newIdx,0,item);
-            renderPreview();
-            show('顺序已调整','success');
+            let oldIdx=evt.oldIndex,newIdx=evt.newIndex;if(oldIdx===newIdx) return;
+            let item=images.splice(oldIdx,1)[0];images.splice(newIdx,0,item);renderPreview();show('顺序已调整','success');
         }
     });
 }
 
 createBtn.onclick=async ()=>{
-    if(!images.length){
-        show('请先上传图片','error');
-        return;
-    }
+    if(!images.length){show('请先上传图片','error');return;}
     result.innerHTML='<div style="padding:40px;text-align:center;">高清拼图生成中...</div>';
-    const title = titleText.value.trim();
-    const COL=parseInt(columnSelect.value);
-    const GAP=12;
-    const CW=2400;
-    const BG='#ccc';
-    const FONT_SIZE=parseInt(numSize.value)*2;
-    const POS=numPos.value;
-    const CELL=(CW-(COL+1)*GAP)/COL;
+    const title = titleText.value.trim();const COL=parseInt(columnSelect.value);const GAP=12;const CW=2400;const BG='#ccc';
+    const FONT_SIZE=parseInt(numSize.value)*2;const POS=numPos.value;const CELL=(CW-(COL+1)*GAP)/COL;
     let imgList=[];
     for(let it of images){
-        let i=new Image();
-        i.src=it.src;
-        await new Promise((r,reject)=>{
-            i.onload=r;
-            i.onerror=reject;
-        }).catch(()=>{});
+        let i=new Image();i.src=it.src;
+        await new Promise((r,reject)=>{i.onload=r;i.onerror=reject;}).catch(()=>{});
         imgList.push(i);
     }
-    let rows=Math.ceil(imgList.length/COL);
-    let rh=[];
+    let rows=Math.ceil(imgList.length/COL);let rh=[];
     for(let r=0;r<rows;r++){
         let m=0;
-        for(let c=0;c<COL;c++){
-            let idx=r*COL+c;
-            if(idx>=imgList.length) break;
-            let i=imgList[idx];
-            let h=i.height*CELL/i.width;
-            if(h>m) m=h;
-        }
+        for(let c=0;c<COL;c++){let idx=r*COL+c;if(idx>=imgList.length) break;let i=imgList[idx];let h=i.height*CELL/i.width;if(h>m) m=h;}
         rh.push(m);
     }
-    
-    let titleHeight = title ? 160 : 0;
-    const totalH=titleHeight + rh.reduce((a,b)=>a+b,0)+(rows+1)*GAP;
-    const canvas=document.createElement('canvas');
-    const ctx=canvas.getContext('2d');
-    
-    ctx.imageSmoothingEnabled = false;
-    ctx.imageSmoothingQuality = "low";
-    canvas.width=CW;
-    canvas.height=totalH;
-    ctx.fillStyle=BG;
-    ctx.fillRect(0,0,CW,totalH);
-    if(title){
-        ctx.fillStyle='#ffffff';
-        ctx.fillRect(0,0,CW,titleHeight);
-        ctx.fillStyle='#000000';
-        ctx.font='bold 72px Arial, Microsoft YaHei';
-        ctx.textAlign='center';
-        ctx.textBaseline='middle';
-        ctx.fillText(title,CW/2,titleHeight/2);
-    }
-    ctx.fillStyle=numColor;
-    ctx.font=`bold ${FONT_SIZE}px Arial`;
-    ctx.textAlign='center';
-    ctx.textBaseline='middle';
-    ctx.strokeStyle='#000000';
-    ctx.lineWidth=Math.max(4, FONT_SIZE/8);
+    let titleHeight = title ? 160 : 0;const totalH=titleHeight + rh.reduce((a,b)=>a+b,0)+(rows+1)*GAP;
+    const canvas=document.createElement('canvas');const ctx=canvas.getContext('2d');
+    ctx.imageSmoothingEnabled = false;ctx.imageSmoothingQuality = "low";canvas.width=CW;canvas.height=totalH;
+    ctx.fillStyle=BG;ctx.fillRect(0,0,CW,totalH);
+    if(title){ctx.fillStyle='#ffffff';ctx.fillRect(0,0,CW,titleHeight);ctx.fillStyle='#000000';ctx.font='bold 72px Arial, Microsoft YaHei';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(title,CW/2,titleHeight/2);}
+    ctx.fillStyle=numColor;ctx.font=`bold ${FONT_SIZE}px Arial`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.strokeStyle='#000000';ctx.lineWidth=Math.max(4, FONT_SIZE/8);
     let cy=GAP + titleHeight;
     for(let r=0;r<rows;r++){
         let h=rh[r];
         for(let c=0;c<COL;c++){
-            let idx=r*COL+c;
-            if(idx>=imgList.length) break;
-            let i=imgList[idx];
-            let n=idx+1;
-            let x=GAP+c*(CELL+GAP);
-            let w=CELL;
-            let ih=i.height*w/i.width;
-            let oy=cy+(h-ih)/2;
+            let idx=r*COL+c;if(idx>=imgList.length) break;
+            let i=imgList[idx],n=idx+1,x=GAP+c*(CELL+GAP),w=CELL,ih=i.height*w/i.width,oy=cy+(h-ih)/2;
             ctx.drawImage(i,x,oy,w,ih);
-            let nx=x+w/2, ny=oy+ih/2;
-            ctx.textAlign='center';
-            ctx.textBaseline='middle';
+            let nx=x+w/2, ny=oy+ih/2;ctx.textAlign='center';ctx.textBaseline='middle';
             if(POS==='tl'){nx=x+10;ny=oy+10;ctx.textAlign='left';ctx.textBaseline='top';}
             if(POS==='tr'){nx=x+w-10;ny=oy+10;ctx.textAlign='right';ctx.textBaseline='top';}
             if(POS==='bl'){nx=x+10;ny=oy+ih-10;ctx.textAlign='left';ctx.textBaseline='bottom';}
@@ -670,45 +420,28 @@ createBtn.onclick=async ()=>{
             if(POS==='tc'){nx=x+w/2;ny=oy+10;ctx.textAlign='center';ctx.textBaseline='top';}
             if(POS==='bc'){nx=x+w/2;ny=oy+ih-10;ctx.textAlign='center';ctx.textBaseline='bottom';}
             if(POS==='cc'){nx=x+w/2;ny=oy+ih/2;ctx.textAlign='center';ctx.textBaseline='middle';}
-            
-            ctx.strokeText(n, nx, ny);
-            ctx.fillText(n, nx, ny);
+            ctx.strokeText(n, nx, ny);ctx.fillText(n, nx, ny);
         }
         cy+=h+GAP;
     }
     let url=canvas.toDataURL('image/png', 1.0);
     result.innerHTML=`<div class="result-box"><img src="${url}" id="finalImg"></div>`;
-    downloadBtn.style.display='inline-block';
-    show('高清无损拼图生成完成', 'success');
+    downloadBtn.style.display='inline-block';show('高清无损拼图生成完成', 'success');
 };
 
 downloadBtn.onclick=()=>{
-    let img=document.getElementById('finalImg');
-    if(!img) return;
-    let a=document.createElement('a');
-    a.download=`捌壹零高清拼图_${Date.now()}.png`;
-    a.href=img.src;
-    a.click();
+    let img=document.getElementById('finalImg');if(!img) return;
+    let a=document.createElement('a');a.download=`捌壹零高清拼图_${Date.now()}.png`;a.href=img.src;a.click();
     show('高清拼图已开始下载','success');
 };
 
 clearBtn.onclick=()=>{
-    images.length = 0;
-    fileInput.value = '';
-    titleText.value = '';
-    renderPreview();
-    result.innerHTML='<div class="empty">生成后显示</div>';
-    downloadBtn.style.display='none';
-    createBtn.disabled = true;
-    clearBtn.disabled = true;
-    show('已清空所有内容','success');
+    images.length = 0;fileInput.value = '';titleText.value = '';renderPreview();
+    result.innerHTML='<div class="empty">生成后显示</div>';downloadBtn.style.display='none';
+    createBtn.disabled = true;clearBtn.disabled = true;show('已清空所有内容','success');
 };
 
-function show(msg,t){
-    status.textContent=msg;
-    status.className=`status ${t}`;
-    setTimeout(()=>status.className='status',3000);
-}
+function show(msg,t){status.textContent=msg;status.className=`status ${t}`;setTimeout(()=>status.className='status',3000);}
 renderPreview();
 </script>
 </body>
