@@ -40,16 +40,33 @@ button:disabled{background:#999;cursor:not-allowed;transform: none;opacity: 1;}
   border:1px solid #333;border-radius:10px;margin:10px 0;
 }
 
-.preview-box{max-height:400px;overflow-y:auto;background:#f8f8f8;padding:10px;border-radius:10px;margin-top:10px;}
-.item{display:flex;align-items:center;background:#fff;padding:12px;margin-bottom:8px;border-radius:8px;}
-.item img{width:65px;height:65px;object-fit:cover;border-radius:6px;margin-right:12px;flex-shrink:0;}
+.list-head{
+  display:flex;align-items:center;justify-content:space-between;margin:15px 0 10px;
+}
+.list-head h4{font-size:15px;font-weight:600;}
+.toggle-btn{
+  border:none;background:none;font-size:22px;cursor:pointer;color:#444;padding:4px 8px;border-radius:6px;
+  line-height:1;
+}
+.toggle-btn:hover{background:#eee;}
+
+.preview-box{max-height:400px;overflow-y:auto;background:#f8f8f8;padding:10px;border-radius:10px;margin-top:10px;transition:max-height 0.35s ease;}
+.preview-box.collapsed{max-height:0;padding:0;overflow:hidden;}
+
+.item{display:flex;align-items:center;background:#fff;padding:12px;margin-bottom:8px;border-radius:8px;gap:10px;}
+.item img{width:65px;height:65px;object-fit:cover;border-radius:6px;flex-shrink:0;}
 .item .name{flex:1;font-size:14px;word-break:break-all;}
-.item .num{font-weight:bold;color:#333;width:40px;text-align:center;font-size:17px;flex-shrink:0;}
+.item .num{font-weight:bold;color:#333;width:36px;text-align:center;font-size:17px;flex-shrink:0;}
+.item .del-btn{
+  width:42px;height:42px;display:flex;align-items:center;justify-content:center;
+  font-size:20px;color:#d63031;cursor:pointer;border-radius:8px;flex-shrink:0;
+}
+.item .del-btn:hover{background:#ffe9e9;}
 
 .drag-handle{
-  width:45px; height:45px;
+  width:42px; height:42px;
   display:flex; align-items:center; justify-content:center;
-  font-size:24px; color:#666;
+  font-size:22px; color:#666;
   cursor:grab; user-select:none;
   flex-shrink:0;
 }
@@ -64,11 +81,11 @@ button:disabled{background:#999;cursor:not-allowed;transform: none;opacity: 1;}
 .empty{text-align:center;padding:40px;color:#999;font-size:15px;}
 .footer{text-align:center;margin-top:25px;padding-top:15px;color:#999;font-size:13px;}
 
-/* 弹窗基础样式 + 动画 */
+/* 弹窗 —— z-index设置到全局最高11000，盖在展开面板之上 */
 .modal-mask{
   position:fixed;top:0;left:0;width:100%;height:100%;
   background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;
-  z-index:9999;padding:15px;
+  z-index:11000;padding:15px;
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.4s ease, visibility 0.4s ease;
@@ -87,10 +104,15 @@ button:disabled{background:#999;cursor:not-allowed;transform: none;opacity: 1;}
 .modal-mask.show .modal-box{
   transform: scale(1);
 }
+/* 删除小弹窗 */
+.small-modal .modal-box{
+  max-width:340px;padding:20px;
+}
 .modal-title{
   font-size:22px;font-weight:bold;text-align:center;margin-bottom:18px;
   color:#222;
 }
+.small-modal .modal-title{font-size:18px;margin-bottom:16px;}
 .modal-content{
   font-size:15px;line-height:1.8;margin-bottom:24px;color:#444;
 }
@@ -104,11 +126,151 @@ button:disabled{background:#999;cursor:not-allowed;transform: none;opacity: 1;}
 .modal-btn:hover{transform: translateY(-2px);box-shadow: 0 4px 12px rgba(0,0,0,0.15);}
 .btn-close{background:#6c757d;color:#fff;}
 .btn-never{background:#28a745;color:#fff;}
+.btn-del-yes{background:#d63031;color:#fff;}
+
+/* 底部展开大图列表面板 */
+.expand-panel{
+  position:fixed;
+  left:0;
+  bottom:0;
+  width:100%;
+  height:80vh;
+  max-height:80vh;
+  background:#fff;
+  border-radius:16px 16px 0 0;
+  box-shadow:0 -4px 30px rgba(0,0,0,0.25);
+  z-index:10000;
+  transform:translateY(100%);
+  transition:transform 0.35s ease;
+  display:flex;
+  flex-direction:column;
+}
+.expand-panel.show{
+  transform:translateY(0);
+}
+.expand-panel-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:16px 20px;
+  border-bottom:1px solid #eee;
+  flex-shrink:0;
+}
+.expand-panel-head h3{
+  font-size:17px;
+  font-weight:bold;
+  color:#222;
+}
+.expand-close{
+  border:none;
+  background:none;
+  font-size:20px;
+  color:#444;
+  padding:8px;
+  border-radius:6px;
+  line-height:1;
+}
+.expand-close:hover{
+  background:#eee;
+}
+.expand-panel-list{
+  flex:1;
+  overflow-y:auto;
+  padding:12px 16px;
+}
+.expand-item{
+  display:flex;
+  align-items:center;
+  background:#f8f8f8;
+  padding:12px;
+  margin-bottom:10px;
+  border-radius:10px;
+  gap:12px;
+}
+.expand-item img{
+  width:72px;
+  height:72px;
+  object-fit:cover;
+  border-radius:8px;
+  flex-shrink:0;
+}
+.expand-item .num{
+  width:40px;
+  text-align:center;
+  font-size:18px;
+  font-weight:bold;
+  color:#333;
+  flex-shrink:0;
+}
+.expand-item .name{
+  flex:1;
+  font-size:15px;
+  word-break:break-all;
+}
+.expand-item .del-btn{
+  width:44px;
+  height:44px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+  color:#d63031;
+  cursor:pointer;
+  border-radius:8px;
+  flex-shrink:0;
+}
+.expand-item .del-btn:hover{
+  background:#ffe9e9;
+}
+.expand-item .drag-handle{
+  width:44px;
+  height:44px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:24px;
+  color:#666;
+  cursor:grab;
+  flex-shrink:0;
+}
+.expand-item .drag-handle:active{
+  cursor:grabbing;
+}
+
+/* 展开时背景半透明遮罩 */
+.expand-overlay{
+  position:fixed;
+  left:0;
+  top:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.5);
+  z-index:9999;
+  opacity:0;
+  visibility:hidden;
+  transition:opacity 0.35s ease, visibility 0.35s ease;
+}
+.expand-overlay.show{
+  opacity:1;
+  visibility:visible;
+}
+
+/* 小屏优化 */
+@media(max-width:768px){
+  .expand-panel{
+    height:85vh;
+    max-height:85vh;
+  }
+  .expand-item img{
+    width:64px;
+    height:64px;
+  }
+}
 </style>
 </head>
 <body>
 
-<!-- 启动欢迎弹窗 -->
+<!-- 开屏欢迎弹窗 -->
 <div id="welcomeModal" class="modal-mask">
   <div class="modal-box">
     <div class="modal-title">欢迎使用捌壹零拼图器</div>
@@ -124,6 +286,27 @@ button:disabled{background:#999;cursor:not-allowed;transform: none;opacity: 1;}
       <button class="modal-btn btn-never" id="neverShow">不再弹出</button>
     </div>
   </div>
+</div>
+
+<!-- 删除确认小弹窗，现在层级最高，永远盖在展开面板上面 -->
+<div id="delConfirmModal" class="modal-mask small-modal">
+  <div class="modal-box">
+    <div class="modal-title">是否删除此图片？</div>
+    <div class="modal-btn-group">
+      <button class="modal-btn btn-del-yes" id="delYes">是</button>
+      <button class="modal-btn btn-close" id="delNo">否</button>
+    </div>
+  </div>
+</div>
+
+<!-- 展开大图列表面板 -->
+<div id="expandOverlay" class="expand-overlay"></div>
+<div id="expandPanel" class="expand-panel">
+  <div class="expand-panel-head">
+    <h3>已选图片</h3>
+    <button class="expand-close" id="closeExpandPanel">⇋</button>
+  </div>
+  <div class="expand-panel-list" id="expandList"></div>
 </div>
 
 <div class="container">
@@ -182,9 +365,13 @@ button:disabled{background:#999;cursor:not-allowed;transform: none;opacity: 1;}
                 </select>
             </div>
 
-            <div class="status" id="status"></div>
-            <h4 style="margin:15px 0 10px">已选图片（按住 ≡ 拖动排序）<span id="count">0</span></h4>
+            <div class="list-head">
+                <h4>已选图片（按住 ≡ 拖动排序）<span id="count">0</span></h4>
+                <button class="toggle-btn" id="openExpandPanel">⇋</button>
+            </div>
             <div class="preview-box" id="previewList"></div>
+
+            <div class="status" id="status"></div>
         </div>
 
         <div class="right">
@@ -198,7 +385,11 @@ button:disabled{background:#999;cursor:not-allowed;transform: none;opacity: 1;}
 
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 <script>
-// 弹窗本地记忆逻辑
+// 全局变量
+let pendingDeleteIndex = null;
+let sortableExpand = null;
+
+// 开屏弹窗
 const welcomeModal = document.getElementById('welcomeModal');
 const closeWelcome = document.getElementById('closeWelcome');
 const neverShow = document.getElementById('neverShow');
@@ -206,7 +397,6 @@ const neverShow = document.getElementById('neverShow');
 if(localStorage.getItem("hideWelcome") !== "1"){
     welcomeModal.classList.add('show');
 }
-
 closeWelcome.addEventListener('click',()=>{
     welcomeModal.classList.remove('show');
 });
@@ -215,7 +405,58 @@ neverShow.addEventListener('click',()=>{
     welcomeModal.classList.remove('show');
 });
 
-// 拼图器原有逻辑
+// 删除确认弹窗
+const delConfirmModal = document.getElementById('delConfirmModal');
+const delYes = document.getElementById('delYes');
+const delNo = document.getElementById('delNo');
+
+delNo.onclick = ()=>{
+    delConfirmModal.classList.remove('show');
+    pendingDeleteIndex = null;
+};
+delYes.onclick = ()=>{
+    if(pendingDeleteIndex !== null){
+        images.splice(pendingDeleteIndex,1);
+        renderAllLists();
+        createBtn.disabled = images.length === 0;
+        clearBtn.disabled = images.length === 0;
+        show("已移除该图片","success");
+    }
+    delConfirmModal.classList.remove('show');
+    pendingDeleteIndex = null;
+};
+
+// 展开大图列表面板
+const expandPanel = document.getElementById('expandPanel');
+const expandOverlay = document.getElementById('expandOverlay');
+const openExpandPanel = document.getElementById('openExpandPanel');
+const closeExpandPanel = document.getElementById('closeExpandPanel');
+const expandList = document.getElementById('expandList');
+
+function openExpand(){
+    if(images.length === 0){
+        show("暂无图片可展开","error");
+        return;
+    }
+    expandPanel.classList.add("show");
+    expandOverlay.classList.add("show");
+    renderExpandList();
+}
+
+function closeExpand(){
+    expandPanel.classList.remove("show");
+    expandOverlay.classList.remove("show");
+    if(sortableExpand){
+        sortableExpand.destroy();
+        sortableExpand = null;
+    }
+}
+
+openExpandPanel.onclick = openExpand;
+closeExpandPanel.onclick = closeExpand;
+expandOverlay.onclick = closeExpand;
+
+// 拼图主逻辑
 const uploadBox = document.getElementById('uploadBox');
 const fileInput = document.getElementById('fileInput');
 const selectBtn = document.getElementById('selectBtn');
@@ -271,7 +512,7 @@ function addFiles(files){
                 });
                 loaded++;
                 if(loaded+fail===files.length){
-                    renderPreview();
+                    renderAllLists();
                     createBtn.disabled = images.length === 0;
                     clearBtn.disabled = images.length === 0;
                     show(`成功加载${loaded}张图片${fail>0?`,${fail}张加载失败`:''}`,'success');
@@ -311,12 +552,59 @@ function renderPreview(){
         d.innerHTML=`
             <div class="drag-handle">≡</div>
             <img src="${img.src}">
-            <div class="name">${img.name}</div>
             <div class="num">${idx+1}</div>
+            <div class="name">${img.name}</div>
+            <div class="del-btn" data-i="${idx}">🗑</div>
         `;
         previewList.appendChild(d);
     });
+    document.querySelectorAll(".del-btn").forEach(el=>{
+        el.onclick = (ev)=>{
+            ev.stopPropagation();
+            pendingDeleteIndex = Number(ev.currentTarget.dataset.i);
+            delConfirmModal.classList.add('show');
+        }
+    });
     initSortable();
+}
+
+function renderExpandList(){
+    expandList.innerHTML='';
+    if(sortableExpand) sortableExpand.destroy();
+    sortableExpand = null;
+
+    if(!images.length){
+        expandList.innerHTML='<div class="empty">暂无图片</div>';
+        return;
+    }
+    images.forEach((img,idx)=>{
+        let d=document.createElement('div');
+        d.className='expand-item';
+        d.dataset.index=idx;
+        d.innerHTML=`
+            <div class="drag-handle">≡</div>
+            <img src="${img.src}">
+            <div class="num">${idx+1}</div>
+            <div class="name">${img.name}</div>
+            <div class="del-btn" data-i="${idx}">🗑</div>
+        `;
+        expandList.appendChild(d);
+    });
+    document.querySelectorAll("#expandList .del-btn").forEach(el=>{
+        el.onclick = (ev)=>{
+            ev.stopPropagation();
+            pendingDeleteIndex = Number(ev.currentTarget.dataset.i);
+            delConfirmModal.classList.add('show');
+        }
+    });
+    initExpandSortable();
+}
+
+function renderAllLists(){
+    renderPreview();
+    if(expandPanel.classList.contains("show")){
+        renderExpandList();
+    }
 }
 
 function initSortable(){
@@ -332,7 +620,26 @@ function initSortable(){
             if(oldIdx===newIdx) return;
             let item=images.splice(oldIdx,1)[0];
             images.splice(newIdx,0,item);
-            renderPreview();
+            renderAllLists();
+            show('顺序已调整','success');
+        }
+    });
+}
+
+function initExpandSortable(){
+    sortableExpand=new Sortable(expandList,{
+        handle:'.drag-handle',
+        animation:200,
+        delay:150,
+        delayOnTouchOnly:true,
+        touchStartThreshold:10,
+        onEnd:function(evt){
+            let oldIdx=evt.oldIndex;
+            let newIdx=evt.newIndex;
+            if(oldIdx===newIdx) return;
+            let item=images.splice(oldIdx,1)[0];
+            images.splice(newIdx,0,item);
+            renderAllLists();
             show('顺序已调整','success');
         }
     });
@@ -467,7 +774,7 @@ clearBtn.onclick=()=>{
     fileInput.value = '';
     titleText.value = '';
     startNum.value='';
-    renderPreview();
+    renderAllLists();
     result.innerHTML='<div class="empty">生成后显示</div>';
     downloadBtn.style.display='none';
     createBtn.disabled = true;
