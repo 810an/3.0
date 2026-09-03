@@ -30,10 +30,10 @@ button:hover{opacity:0.9;transform: scale(1.02);}
 button.download{background:#28a745;width:100%;margin-top:15px;font-size:17px;padding:16px;flex:1 1 100%;}
 button:disabled{background:#999;cursor:not-allowed;transform: none;opacity: 1;}
 
-.column-select,.setting-row{margin:12px 0;display:flex;align-items:center;gap:10px;flex-wrap:wrap;width:100%}
+.setting-row{margin:12px 0;display:flex;align-items:center;gap:10px;flex-wrap:wrap;width:100%}
 .setting-row label{min-width:90px;font-size:15px;font-weight:600;flex-shrink:0;}
 .setting-row input[type="range"]{flex:1;min-width:120px;height:32px;}
-.setting-row select{padding:12px 14px;border:1px solid #333;border-radius:10px;font-size:15px;flex:1;min-width:120px;}
+.setting-row select,.setting-row input[type="number"]{padding:12px 14px;border:1px solid #333;border-radius:10px;font-size:15px;flex:1;min-width:120px;}
 
 .title-input{
   width:100%;padding:12px 15px;font-size:16px;
@@ -103,20 +103,13 @@ button:disabled{background:#999;cursor:not-allowed;transform: none;opacity: 1;}
 }
 .modal-btn:hover{transform: translateY(-2px);box-shadow: 0 4px 12px rgba(0,0,0,0.15);}
 .btn-close{background:#6c757d;color:#fff;}
-.btn-donate{background:#e64340;color:#fff;}
-
-/* 打赏图片 高清原比例展示 */
-.donate-img{
-  width:100%;height:auto;border-radius:10px;margin-bottom:18px;
-  image-rendering: crisp-edges;
-  image-rendering: -webkit-optimize-contrast;
-}
+.btn-never{background:#28a745;color:#fff;}
 </style>
 </head>
 <body>
 
 <!-- 启动欢迎弹窗 -->
-<div id="welcomeModal" class="modal-mask show">
+<div id="welcomeModal" class="modal-mask">
   <div class="modal-box">
     <div class="modal-title">欢迎使用捌壹零拼图器</div>
     <div class="modal-content">
@@ -128,16 +121,8 @@ button:disabled{background:#999;cursor:not-allowed;transform: none;opacity: 1;}
     </div>
     <div class="modal-btn-group">
       <button class="modal-btn btn-close" id="closeWelcome">关闭</button>
-      <button class="modal-btn btn-donate" id="openDonate">打赏</button>
+      <button class="modal-btn btn-never" id="neverShow">不再弹出</button>
     </div>
-  </div>
-</div>
-
-<!-- 打赏弹窗 -->
-<div id="donateModal" class="modal-mask">
-  <div class="modal-box">
-    <img class="donate-img" src="https://cdn.mufy.ai/images/3492b8c4-6cf0-4724-7068-26dfe0bffd00/public" alt="打赏">
-    <button class="modal-btn btn-close" id="closeDonate">关闭</button>
   </div>
 </div>
 
@@ -156,7 +141,7 @@ button:disabled{background:#999;cursor:not-allowed;transform: none;opacity: 1;}
                 <button id="clearBtn" disabled>清空</button>
             </div>
 
-            <div class="column-select">
+            <div class="setting-row">
                 <label>每行数量：</label>
                 <select id="columnSelect">
                     <option value="2">2张</option>
@@ -164,6 +149,17 @@ button:disabled{background:#999;cursor:not-allowed;transform: none;opacity: 1;}
                     <option value="4" selected>4张</option>
                     <option value="5">5张</option>
                     <option value="6">6张</option>
+                </select>
+            </div>
+            <div class="setting-row">
+                <label>序号起始：</label>
+                <input type="number" id="startNum" placeholder="默认1" min="1">
+            </div>
+            <div class="setting-row">
+                <label>图片序号：</label>
+                <select id="showIndexSwitch">
+                    <option value="on">显示序号</option>
+                    <option value="off">不显示序号</option>
                 </select>
             </div>
 
@@ -202,27 +198,21 @@ button:disabled{background:#999;cursor:not-allowed;transform: none;opacity: 1;}
 
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 <script>
-// 弹窗元素
+// 弹窗本地记忆逻辑
 const welcomeModal = document.getElementById('welcomeModal');
-const donateModal = document.getElementById('donateModal');
 const closeWelcome = document.getElementById('closeWelcome');
-const openDonate = document.getElementById('openDonate');
-const closeDonate = document.getElementById('closeDonate');
+const neverShow = document.getElementById('neverShow');
 
-// 关闭欢迎弹窗（带动画）
+if(localStorage.getItem("hideWelcome") !== "1"){
+    welcomeModal.classList.add('show');
+}
+
 closeWelcome.addEventListener('click',()=>{
     welcomeModal.classList.remove('show');
 });
-// 打开打赏弹窗
-openDonate.addEventListener('click',()=>{
+neverShow.addEventListener('click',()=>{
+    localStorage.setItem("hideWelcome","1");
     welcomeModal.classList.remove('show');
-    setTimeout(()=>{
-        donateModal.classList.add('show');
-    },200);
-});
-// 关闭打赏弹窗
-closeDonate.addEventListener('click',()=>{
-    donateModal.classList.remove('show');
 });
 
 // 拼图器原有逻辑
@@ -241,6 +231,8 @@ const numSize = document.getElementById('numSize');
 const numSizeVal = document.getElementById('numSizeVal');
 const numPos = document.getElementById('numPos');
 const titleText = document.getElementById('titleText');
+const startNum = document.getElementById('startNum');
+const showIndexSwitch = document.getElementById('showIndexSwitch');
 
 let images = [];
 let numColor = '#ffffff';
@@ -360,6 +352,9 @@ createBtn.onclick=async ()=>{
     const BG='#ccc';
     const FONT_SIZE=parseInt(numSize.value)*2;
     const POS=numPos.value;
+    const drawNumber = showIndexSwitch.value === "on";
+    let base = parseInt(startNum.value.trim()) || 1;
+
     const CELL=(CW-(COL+1)*GAP)/COL;
 
     let imgList=[];
@@ -425,13 +420,14 @@ createBtn.onclick=async ()=>{
             let idx=r*COL+c;
             if(idx>=imgList.length) break;
             let i=imgList[idx];
-            let n=idx+1;
+            let currentNum = base + idx;
             let x=GAP+c*(CELL+GAP);
             let w=CELL;
             let ih=i.height*w/i.width;
             let oy=cy+(h-ih)/2;
 
             ctx.drawImage(i,x,oy,w,ih);
+            if(!drawNumber) continue;
 
             let nx=x+w/2, ny=oy+ih/2;
             ctx.textAlign='center';
@@ -444,13 +440,12 @@ createBtn.onclick=async ()=>{
             if(POS==='bc'){nx=x+w/2;ny=oy+ih-10;ctx.textAlign='center';ctx.textBaseline='bottom';}
             if(POS==='cc'){nx=x+w/2;ny=oy+ih/2;ctx.textAlign='center';ctx.textBaseline='middle';}
             
-            ctx.strokeText(n, nx, ny);
-            ctx.fillText(n, nx, ny);
+            ctx.strokeText(String(currentNum), nx, ny);
+            ctx.fillText(String(currentNum), nx, ny);
         }
         cy+=h+GAP;
     }
 
-    // 导出图片 100%高清无压缩
     let url=canvas.toDataURL('image/png', 1.0);
     result.innerHTML=`<div class="result-box"><img src="${url}" id="finalImg"></div>`;
     downloadBtn.style.display='inline-block';
@@ -471,6 +466,7 @@ clearBtn.onclick=()=>{
     images.length = 0;
     fileInput.value = '';
     titleText.value = '';
+    startNum.value='';
     renderPreview();
     result.innerHTML='<div class="empty">生成后显示</div>';
     downloadBtn.style.display='none';
